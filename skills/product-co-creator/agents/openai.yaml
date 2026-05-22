@@ -1,0 +1,4 @@
+interface:
+  display_name: "Product Co-Creator"
+  short_description: "Shape product ideas into executable designs"
+  default_prompt: "Use $product-co-creator to turn this product idea into a concrete product direction, MVP scope, user flows, feature structure, and delivery-ready requirements."

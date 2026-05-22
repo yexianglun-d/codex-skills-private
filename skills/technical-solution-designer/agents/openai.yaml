@@ -1,0 +1,4 @@
+interface:
+  display_name: "Technical Solution Designer"
+  short_description: "Turn product plans into technical designs"
+  default_prompt: "Use $technical-solution-designer to turn this product plan into a concrete technical architecture, data model, API shape, implementation modules, and delivery-ready engineering design."

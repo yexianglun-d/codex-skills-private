@@ -1,0 +1,4 @@
+interface:
+  display_name: "Root Cause Fixer"
+  short_description: "Diagnose root causes and ship complete fixes"
+  default_prompt: "Use $root-cause-fixer to diagnose this bug from first principles, identify the true root cause, and implement a complete fix without patch-style workarounds."

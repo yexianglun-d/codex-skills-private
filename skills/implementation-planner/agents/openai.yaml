@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implementation Planner"
+  short_description: "Turn technical designs into build plans"
+  default_prompt: "Use $implementation-planner to turn this technical design into execution phases, development tasks, acceptance criteria, testing strategy, and delivery checkpoints."

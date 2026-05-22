@@ -1,0 +1,7 @@
+interface:
+  display_name: "刘颖聊天风格"
+  short_description: "查询刘颖资料、亲密偏好并生成聊天回复"
+  default_prompt: "Use $liu-ying-chat-style to answer a Liu Ying relationship question or draft a respectful chat reply."
+
+policy:
+  allow_implicit_invocation: false
