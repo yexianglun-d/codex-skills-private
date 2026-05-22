@@ -1,6 +1,6 @@
 ---
 name: codex-project-orchestrator
-description: Initialize and run a repository-local project control workflow for Codex multi-thread development. Use when the user wants to turn a PRD into feature tracking, coding milestones, task boards, thread handoffs, integration logs, progress audits, or when they ask how multiple Codex threads should coordinate without corrupting each other's work.
+description: Initialize and run a repository-local project control workflow for Codex multi-thread development. Use when the user wants a main thread to analyze project progress, turn a PRD into feature tracking, coding milestones, task boards, thread handoffs, integration logs, progress audits, or coordinate multiple Codex threads without corrupting each other's work.
 ---
 
 # Codex Project Orchestrator
@@ -13,6 +13,7 @@ Core distinction:
 
 - Skill = reusable process, rules, prompts, and templates.
 - `docs/project` = repository-local facts: PRD, feature status, task ownership, handoffs, integration results.
+- Default invocation = main thread, not development thread.
 
 ## Trigger Phrases
 
@@ -24,8 +25,33 @@ Use this skill when the user asks for:
 - "不同 Codex 线程怎么协作"
 - "初始化项目控制台"
 - "盘点当前开发进度"
+- "作为主线程分析项目"
 - "作为开发线程领取任务"
 - "作为集成线程合并和验收"
+
+## Thread Role Model
+
+When this skill is invoked without an explicit role, act as the main thread.
+
+Main thread responsibilities:
+
+- Analyze PRD, project scope, progress, dependencies, blockers, and sequencing.
+- Initialize and maintain `docs/project` control files.
+- Split PRD into feature map, milestones, and task board.
+- Assign clear task boundaries for development threads.
+- Read handoffs and produce integration readiness analysis.
+- Report current progress and next recommended tasks.
+
+Main thread restrictions:
+
+- Do not modify product source code, tests, migrations, runtime config, or implementation files.
+- Do not silently switch into a development or integration thread.
+- Only edit repository-local project control documents unless the user explicitly changes role.
+- If the user asks for implementation while still in main-thread mode, create or update the task entry and provide the exact development-thread prompt to run next.
+
+Development thread mode starts only when the user explicitly says they are starting a development thread and provides a task ID or a narrow task boundary.
+
+Integration thread mode starts only when the user explicitly asks for integration, merge validation, release readiness, or cross-thread consolidation.
 
 ## Project Control Files
 
@@ -95,7 +121,7 @@ Rules:
 
 ### 5. Run A Development Thread
 
-When acting as a development thread:
+Only enter this mode when explicitly requested. When acting as a development thread:
 
 1. Read `01-feature-map.md`, `02-milestones.md`, `03-task-board.md`, and `04-thread-handoff.md`.
 2. Confirm the selected task ID and file boundary.
@@ -109,7 +135,7 @@ Do not let a development thread silently expand scope or integrate other threads
 
 ### 6. Run An Integration Thread
 
-When acting as an integration thread:
+Only enter this mode when explicitly requested. When acting as an integration thread:
 
 1. Read all project control files.
 2. Identify tasks in `REVIEW` or `VERIFIED`.
