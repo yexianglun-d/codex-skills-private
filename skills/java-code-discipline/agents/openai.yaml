@@ -1,0 +1,7 @@
+interface:
+  display_name: "Java Code Discipline"
+  short_description: "Disciplined Java fixes and reviews"
+  default_prompt: "Use $java-code-discipline to fix this Java issue with root-cause analysis, project-style reuse, minimal scoped edits, and validation."
+
+policy:
+  allow_implicit_invocation: true

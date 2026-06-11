@@ -46,10 +46,11 @@ Validate:
 python3 /Users/deng/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/deng/.codex/skills/liu-ying-chat-style
 ```
 
-Useful local source:
+Useful local sources:
 
 ```text
 /Users/deng/Desktop/私聊_可爱颖宝宝.json
+/Users/deng/Library/Containers/com.tencent.xinWeChat/Data/Documents/xwechat_files/wxid_2dwmasgsi8sy22_8afb/msg/file/2026-05/私聊_可爱颖宝宝.json
 ```
 
 ## Do Not

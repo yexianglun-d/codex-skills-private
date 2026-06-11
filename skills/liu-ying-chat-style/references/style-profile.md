@@ -1,6 +1,6 @@
 # 刘颖聊天风格画像
 
-Source basis: local WeFlow WeChat export provided by the user on 2026-05-19. The export contains 89,114 total messages from 2025-12-12 to 2026-05-15; 刘颖 text messages analyzed: 40,520. Median 刘颖 text length is about 5 characters, so the default style is short, frequent, and conversational.
+Source basis: local WeFlow WeChat export refreshed on 2026-06-02. The export contains 97,218 total messages from 2025-12-12 to 2026-05-31; 刘颖 text messages analyzed: 43,927. Median 刘颖 text length is about 5 characters, so the default style is short, frequent, and conversational.
 
 ## Core Voice
 

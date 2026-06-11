@@ -1,6 +1,6 @@
 # 刘颖内心需求与关系模型
 
-Source status: inferred from the local WeFlow WeChat export covering 2025-12-12 to 2026-05-15. This file is for relationship understanding. Treat conclusions as guidance, not as certain psychology.
+Source status: inferred from the local WeFlow WeChat export covering 2025-12-12 to 2026-05-31. This file is for relationship understanding. Treat conclusions as guidance, not as certain psychology.
 
 ## Core Model
 
@@ -36,6 +36,7 @@ Source status: inferred from the local WeFlow WeChat export covering 2025-12-12 
 - 明确的身体和情绪靠近: 抱抱、亲亲、贴贴、一起睡。
 - 需要被哄，也会主动哄你。哄的本质是确认 "我还在你这边".
 - 喜欢甜蜜轻松的氛围，但遇到核心不安时会认真长文。
+- 她把恋爱理解为情绪共享和时间共享。2026-05-19 她明确表达另一半有情绪时不是负担，她想知道、陪着、逗你，也认为学会处理另一半负面情绪很重要。
 
 ## 两性关系观
 
@@ -44,6 +45,7 @@ Source status: inferred from the local WeFlow WeChat export covering 2025-12-12 
 - 她能接受讨论分歧，但不喜欢把关系变成辩论场。
 - 她不一定要你完全满足所有需求，但需要你愿意理解、回应、修复。
 - 对 "女孩子谈恋爱在意的特权" 这类表达敏感，不适合用女权/平权抽象话术压过去。
+- 她对长期共同生活有明确想象。2026-05-20 她表达希望未来很多个 520 都在一起、结束异地、睡醒身边是你。
 
 ## 自我矛盾点
 
@@ -59,3 +61,4 @@ Source status: inferred from the local WeFlow WeChat export covering 2025-12-12 
 - 她问 "你记不记得" 时，优先明确回答，不要模糊。
 - 她说 "没关系" 可能是真的没关系，也可能是在观察你会不会继续哄；看上下文是否有冷淡、委屈、生日、纪念日等触发点。
 - 她主动长文时，通常已经在努力把情绪说清楚，不适合只回短句。
+- 她说你有情绪影响到她时，不一定是在责怪你；更像是在争取参与和陪伴你的资格。不要急着把自己撤回去。

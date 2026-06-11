@@ -1,0 +1,6 @@
+interface:
+  display_name: "UI UX Pro Max"
+  short_description: "UI/UX design systems and audits"
+  default_prompt: "Use $ui-ux-pro-max to analyze this interface and produce a design system, UX checklist, or UI audit."
+policy:
+  allow_implicit_invocation: false
