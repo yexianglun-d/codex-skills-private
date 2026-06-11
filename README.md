@@ -38,12 +38,14 @@ This snapshot mirrors non-system skill folders from `~/.codex/skills/`.
 
 `mcp/config.sanitized.toml` contains a sanitized MCP server snapshot from `~/.codex/config.toml`.
 
-Current backed-up MCP entries:
+Current sanitized/restorable MCP config entries:
 
 - `postman`
 - `sequential-thinking`
 - `context7`
 - `node_repl`
+
+`mcp/inventory.md` also records MCPs that are enabled by Codex plugins and not directly represented as copyable `[mcp_servers.*]` blocks, such as `computer-use`.
 
 `CONTEXT7_API_KEY` is intentionally replaced with `<SET_IN_LOCAL_CODEX_CONFIG>`.
 
