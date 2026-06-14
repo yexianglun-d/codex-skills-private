@@ -1,6 +1,6 @@
 # MCP Inventory
 
-Snapshot date: 2026-06-11
+Snapshot date: 2026-06-14
 
 This file records the MCP servers shown by `codex mcp list`. Use `config.sanitized.toml` for copyable user config blocks. Plugin-managed MCPs may be enabled by Codex/plugin state rather than by a direct block in `~/.codex/config.toml`.
 
@@ -13,6 +13,10 @@ This file records the MCP servers shown by `codex mcp list`. Use `config.sanitiz
 | `node_repl` | `~/.codex/config.toml` / Codex app runtime | stdio | Restore from `config.sanitized.toml`; paths may vary by Codex app version. |
 | `sequential-thinking` | `~/.codex/config.toml` | stdio via `npx -y @modelcontextprotocol/server-sequential-thinking` | Restore from `config.sanitized.toml`. |
 | `postman` | `~/.codex/config.toml` | streamable HTTP | Restore URL from `config.sanitized.toml`, then re-auth OAuth if needed. |
+
+## Plugin Inventory
+
+For plugins, use `../INVENTORY.md`. Do not restore plugins by copying cache directories unless the target Codex version explicitly supports that.
 
 ## Secret Handling
 

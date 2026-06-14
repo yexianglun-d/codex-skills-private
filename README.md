@@ -1,77 +1,54 @@
 # Codex Skills Private
 
-This private repository stores a local backup of personal Codex skills and MCP configuration notes.
+Private backup and transfer kit for Deng's local Codex setup.
 
-Keep this repository private. Do not commit live `~/.codex/auth.json`, raw `~/.codex/config.toml`, API keys, OAuth tokens, or environment files.
+This repository is meant to be handed to another Codex instance or another AI agent so it can understand what is installed locally and restore the useful parts without guessing.
 
-## Skills
+## Read Order
 
-This snapshot mirrors non-system skill folders from `~/.codex/skills/`.
+1. `INVENTORY.md` - exact list of skills, MCP servers, and plugins.
+2. `RESTORE.md` - restore procedure for a new machine.
+3. `skills/` - vendored non-system local skills.
+4. `mcp/config.sanitized.toml` - sanitized MCP config blocks.
+5. `global/AGENTS.md` - global Codex collaboration rules snapshot.
 
-- `chronicle`
-- `codex-project-orchestrator`
-- `figma`
-- `figma-code-connect-components`
-- `figma-create-design-system-rules`
-- `figma-implement-design`
-- `frontend-design`
-- `gsap-core`
-- `gsap-frameworks`
-- `gsap-performance`
-- `gsap-plugins`
-- `gsap-react`
-- `gsap-scrolltrigger`
-- `gsap-timeline`
-- `gsap-utils`
-- `implementation-planner`
-- `java-code-discipline`
-- `liu-ying-chat-style`
-- `pdf`
-- `playwright`
-- `playwright-interactive`
-- `product-co-creator`
-- `root-cause-fixer`
-- `technical-solution-designer`
-- `ui-ux-pro-max`
+## Safety Rules
 
-## MCP
+Keep this repository private.
 
-`mcp/config.sanitized.toml` contains a sanitized MCP server snapshot from `~/.codex/config.toml`.
+Do not commit:
 
-Current sanitized/restorable MCP config entries:
+- `~/.codex/auth.json`
+- raw `~/.codex/config.toml`
+- API keys
+- OAuth tokens
+- bearer tokens
+- `.env` files
 
-- `postman`
-- `sequential-thinking`
-- `context7`
-- `node_repl`
+`CONTEXT7_API_KEY` is intentionally stored as `<SET_IN_LOCAL_CODEX_CONFIG>`.
 
-`mcp/inventory.md` also records MCPs that are enabled by Codex plugins and not directly represented as copyable `[mcp_servers.*]` blocks, such as `computer-use`.
+## Current Snapshot
 
-`CONTEXT7_API_KEY` is intentionally replaced with `<SET_IN_LOCAL_CODEX_CONFIG>`.
+Snapshot date: 2026-06-14
 
-## Global Rules
+- Non-system local skills: 25
+- System skills noted but not vendored: 5
+- MCP servers: 5
+- Unique plugin entries: 14
+- Plugin-provided skills observed in cache: 62
 
-`global/AGENTS.md` stores the current global Codex collaboration rules, including MCP trigger policy.
+## Quick Restore
 
-## Restore
-
-Restore skills:
+Restore local skills only:
 
 ```bash
-rsync -a skills/ ~/.codex/skills/
+bash scripts/restore-skills.sh
 ```
 
-Restore MCP configuration manually by copying the relevant `[mcp_servers.*]` blocks from:
+Then restore MCP and plugins using:
 
 ```text
-mcp/config.sanitized.toml
+RESTORE.md
 ```
 
-Then put real secrets back only in the local machine config, for example:
-
-```toml
-[mcp_servers.context7.env]
-CONTEXT7_API_KEY = "..."
-```
-
-Restart Codex or open a new thread if the skill or MCP list does not update immediately.
+Restart Codex or open a new thread after restoring skills, MCPs, or plugins.
