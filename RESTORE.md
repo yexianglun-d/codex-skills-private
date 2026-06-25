@@ -11,6 +11,8 @@ This guide is for a new Codex machine or another AI agent receiving this reposit
 ## What Must Be Reconfigured Locally
 
 - Context7 API key
+- GitHub MCP bearer token env var, if using GitHub MCP
+- Figma login, if using Figma MCP write/read operations
 - Postman OAuth login
 - Codex auth
 - Plugin installation or enablement in the Codex app
@@ -53,6 +55,8 @@ Recommended commands:
 codex mcp add sequential-thinking --env DISABLE_THOUGHT_LOGGING=true -- npx -y @modelcontextprotocol/server-sequential-thinking
 codex mcp add context7 -- npx -y @upstash/context7-mcp
 codex mcp add postman --url https://mcp.postman.com/mcp
+codex mcp add figma --url https://mcp.figma.com/mcp
+codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PAT_TOKEN
 ```
 
 Then edit `~/.codex/config.toml` and set:
@@ -62,7 +66,7 @@ Then edit `~/.codex/config.toml` and set:
 startup_timeout_sec = 20
 
 [mcp_servers.context7.env]
-CONTEXT7_API_KEY = "..."
+CONTEXT7_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
 ```
 
 For Postman, authenticate locally if needed:
@@ -70,6 +74,10 @@ For Postman, authenticate locally if needed:
 ```bash
 codex mcp login postman
 ```
+
+For GitHub MCP, set `GITHUB_PAT_TOKEN` locally before use. Do not commit the token.
+
+For Figma MCP, authenticate from the target Codex/Figma environment if the server reports `Not logged in`.
 
 `node_repl` and `computer-use` are normally installed or managed by the Codex app and bundled plugins. Do not blindly copy old absolute runtime paths if the Codex app version differs.
 

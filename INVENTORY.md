@@ -1,6 +1,6 @@
 # Inventory
 
-Snapshot date: 2026-06-14
+Snapshot date: 2026-06-25
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.
 
@@ -25,6 +25,7 @@ These are vendored under `skills/` and can be restored directly.
 | `gsap-scrolltrigger` | default | ScrollTrigger and scroll-driven animation. |
 | `gsap-timeline` | default | GSAP timeline sequencing. |
 | `gsap-utils` | default | `gsap.utils` helpers. |
+| `hatch-pet` | default | Create, repair, validate, QA, and package Codex animated pets and spritesheets. |
 | `implementation-planner` | default | Technical plan to implementation phases and task breakdown. |
 | `java-code-discipline` | auto | Java root-cause, project-style, minimal-change discipline. |
 | `liu-ying-chat-style` | explicit only | Private relationship/chat style skill. Keep private. |
@@ -33,8 +34,10 @@ These are vendored under `skills/` and can be restored directly.
 | `playwright-interactive` | default | Persistent browser/Electron interaction. |
 | `product-co-creator` | default | Product idea to MVP, flows, requirements, roadmap. |
 | `root-cause-fixer` | default | Reproduce, diagnose, fix, and validate bugs. |
+| `taste-skill` | explicit only | Anti-template frontend visual direction; main skill name is `design-taste-frontend`. |
 | `technical-solution-designer` | default | PRD/product plan to technical architecture and APIs. |
 | `ui-ux-pro-max` | explicit only | Private UI/UX intelligence and design system skill. |
+| `vue-code-discipline` | auto | Vue code discipline, enterprise directory structure, component/data-flow rules, and validation. |
 
 ## System Skills Not Vendored
 
@@ -54,6 +57,8 @@ These are expected to come from Codex/system installation.
 | --- | --- | --- |
 | `computer-use` | enabled | Plugin-managed by Codex bundled Computer Use. |
 | `context7` | enabled | Restore config, then set `CONTEXT7_API_KEY` locally. |
+| `figma` | enabled, not logged in | Restore URL; authenticate in Figma/Codex if design operations require login. |
+| `github` | enabled with bearer token env | Restore URL, then set `GITHUB_PAT_TOKEN` locally if this MCP is needed. |
 | `node_repl` | enabled | Codex app runtime managed; verify path on target machine. |
 | `sequential-thinking` | enabled | Restore with `npx -y @modelcontextprotocol/server-sequential-thinking`. |
 | `postman` | enabled OAuth | Restore URL and re-auth with `codex mcp login postman` if needed. |
@@ -64,20 +69,23 @@ Unique plugin entries observed on the source machine:
 
 | Plugin | Version / Build | Source type |
 | --- | --- | --- |
-| `browser` | `26.609.41114` | openai-bundled |
-| `chrome` | `26.609.41114` | openai-bundled |
-| `computer-use` | `1.0.809` | openai-bundled |
+| `browser` | `26.616.81150` | openai-bundled |
+| `chrome` | `26.616.81150` | openai-bundled |
+| `computer-use` | `1.0.829` | openai-bundled |
+| `build-ios-apps` | `0.1.2` | openai-curated-remote |
 | `build-web-apps` | `0.1.2` | openai-curated |
-| `figma` | `2.0.9` | openai-curated / remote cache |
+| `figma` | `2.0.12` | openai-curated / remote cache |
 | `game-studio` | `0.1.2` | openai-curated |
-| `github` | `0.1.2` | openai-curated |
-| `heygen` | `2.2.3` | openai-curated / remote cache |
+| `github` | `0.1.6` | openai-curated |
+| `heygen` | `2.2.4` | openai-curated |
 | `hyperframes` | `0.1.2` | openai-curated |
-| `remotion` | `1.0.2` | openai-curated |
-| `product-design` | `0.1.46` | openai-curated-remote |
-| `documents` | `26.601.10930` | openai-primary-runtime |
-| `presentations` | `26.601.10930` | openai-primary-runtime |
-| `spreadsheets` | `26.601.10930` | openai-primary-runtime |
+| `remotion` | `1.0.3` | openai-curated |
+| `product-design` | `0.1.47` | openai-curated-remote |
+| `documents` | `26.623.12021` | openai-primary-runtime |
+| `pdf` | `26.623.12021` | openai-primary-runtime |
+| `presentations` | `26.623.12021` | openai-primary-runtime |
+| `spreadsheets` | `26.623.12021` | openai-primary-runtime |
+| `template-creator` | `26.623.12021` | openai-primary-runtime |
 
 ## Plugin-Provided Skill Groups
 
@@ -88,8 +96,9 @@ These are not vendored in `skills/`; restore them by installing/enabling the cor
 | `browser` | `control-in-app-browser` |
 | `chrome` | `control-chrome` |
 | `computer-use` | `computer-use` |
+| `build-ios-apps` | `ios-app-intents`, `ios-debugger-agent`, `ios-ettrace-performance`, `ios-memgraph-leaks`, `ios-simulator-browser`, `swiftui-liquid-glass`, `swiftui-performance-audit`, `swiftui-ui-patterns`, `swiftui-view-refactor` |
 | `build-web-apps` | `frontend-app-builder`, `frontend-testing-debugging`, `react-best-practices`, `shadcn-best-practices`, `stripe-best-practices`, `supabase-best-practices` |
-| `figma` | `figma-code-connect`, `figma-create-new-file`, `figma-generate-design`, `figma-generate-diagram`, `figma-generate-library`, `figma-use`, `figma-use-figjam`, `figma-use-slides` |
+| `figma` | `figma-code-connect`, `figma-create-new-file`, `figma-generate-design`, `figma-generate-diagram`, `figma-generate-library`, `figma-implement-motion`, `figma-swiftui`, `figma-use`, `figma-use-figjam`, `figma-use-motion`, `figma-use-slides` |
 | `game-studio` | `game-playtest`, `game-studio`, `game-ui-frontend`, `phaser-2d-game`, `react-three-fiber-game`, `sprite-pipeline`, `three-webgl-game`, `web-3d-asset-pipeline`, `web-game-foundations` |
 | `github` | `gh-address-comments`, `gh-fix-ci`, `github`, `yeet` |
 | `heygen` | `heygen-avatar`, `heygen-video` |
@@ -97,5 +106,7 @@ These are not vendored in `skills/`; restore them by installing/enabling the cor
 | `remotion` | `remotion` |
 | `product-design` | `audit`, `design-qa`, `get-context`, `ideate`, `image-to-code`, `index`, `prototype`, `research`, `share`, `url-to-code`, `user-context` |
 | `documents` | `documents` |
+| `pdf` | `pdf` |
 | `presentations` | `presentations` |
 | `spreadsheets` | `spreadsheets` |
+| `template-creator` | `template-creator` |

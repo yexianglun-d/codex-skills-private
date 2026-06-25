@@ -1,0 +1,7 @@
+interface:
+  display_name: "Design Taste Frontend"
+  short_description: "Anti-slop frontend visual direction"
+  default_prompt: "Use $design-taste-frontend to improve a landing page, portfolio, or redesign with stronger layout, typography, motion, spacing, and anti-template visual direction."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Vue Code Discipline"
+  short_description: "Disciplined Vue fixes and reviews"
+  default_prompt: "Use $vue-code-discipline to fix or implement this Vue change with project-style reuse, component/data-flow discipline, root-cause analysis, minimal scoped edits, and validation."
+
+policy:
+  allow_implicit_invocation: true
