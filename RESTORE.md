@@ -36,17 +36,16 @@ It does not copy `.system` skills and does not delete unrelated skills on the ta
 
 The restored project-memory workflow uses:
 
-- `codex-project-orchestrator` as the main-thread coordinator.
-- `project-memory-manager` as the explicit-only owner of repository-local `docs/project-memory/` v2 empty-table templates, validation, handoffs, inbox review, atomic ownership claim/release, completion evidence binding, and session snapshots.
+- `project-memory-manager` as the explicit-only lightweight project journal for repository-local `docs/project-memory/`.
+- `codex-project-orchestrator` only for advanced PRD decomposition, milestones, task boards, multi-thread coordination, progress audits, or integration planning.
 
 Important behavior:
 
+- `project-memory-manager` creates only four files: `00-current-status.md`, `01-activity-log.md`, `02-decisions.md`, and `03-next-handoff.md`.
+- It does not default to heavy project-management or worker-coordination workflows.
 - `codex-project-orchestrator/scripts/init_project_control.sh` only forwards to `project-memory-manager`; it no longer creates legacy `docs/project`.
 - `project-memory-manager` uses `${CODEX_HOME:-$HOME/.codex}` in examples and scripts instead of a personal absolute path.
-- Run `project-memory-manager/scripts/claim_ownership.sh` before worker writes and `release_ownership.sh` when the task is done, blocked, or stale; these scripts use `docs/project-memory/.locks/ownership.lock.d` as an atomic process lock.
-- Ownership paths must be repository-relative and cannot contain absolute paths or `..` components.
-- Run `project-memory-manager/scripts/log_validation.sh` to add validation evidence inside the table.
-- Run `project-memory-manager/scripts/validate_project_memory.sh` after initializing or changing project memory files; it checks manual ownership scope, staged handoff deletions, full archive structure, and `VERIFIED` / `DONE` evidence binding.
+- Run `project-memory-manager/scripts/validate_project_memory.sh` after initializing or changing project memory files; it only checks the lightweight journal structure.
 
 ## Step 2: Restore Global Rules
 

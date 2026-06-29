@@ -7,7 +7,7 @@ Usage:
   init_project_control.sh [repo-root] [--force]
 
 Compatibility wrapper. Prefer project-memory-manager.
-Creates docs/project-memory files when project-memory-manager is installed.
+Creates the lightweight docs/project-memory journal when project-memory-manager is installed.
 Existing files are not overwritten unless --force is provided.
 USAGE
 }

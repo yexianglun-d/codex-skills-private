@@ -6,7 +6,7 @@ usage() {
 Usage:
   init_project_memory.sh [repo-root] [--force]
 
-Creates docs/project-memory files for Codex project memory.
+Creates a lightweight docs/project-memory project journal.
 Existing files are not overwritten unless --force is provided.
 USAGE
 }
@@ -36,9 +36,13 @@ done
 TARGET_ROOT="$(cd "${TARGET_ROOT}" && pwd)"
 TARGET_DIR="${TARGET_ROOT}/docs/project-memory"
 
+if [[ "${FORCE}" == "true" && -d "${TARGET_DIR}" ]]; then
+  rm -rf "${TARGET_DIR}"
+fi
+
 mkdir -p "${TARGET_DIR}"
 
-created=0
+written=0
 skipped=0
 
 while IFS= read -r template; do
@@ -52,12 +56,8 @@ while IFS= read -r template; do
   fi
   cp "${template}" "${target}"
   echo "WRITE ${target}"
-  created=$((created + 1))
+  written=$((written + 1))
 done < <(find "${TEMPLATE_DIR}" -type f | sort)
 
-echo "Project memory initialized: ${TARGET_DIR}"
-echo "Created or overwritten: ${created}; skipped: ${skipped}"
-
-if [[ -d "${TARGET_ROOT}/docs/project" ]]; then
-  echo "NOTE legacy docs/project exists; read it before migrating useful state."
-fi
+echo "Project journal initialized: ${TARGET_DIR}"
+echo "Written: ${written}; skipped: ${skipped}"

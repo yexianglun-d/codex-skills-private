@@ -1,7 +1,7 @@
 interface:
   display_name: "Project Memory Manager"
-  short_description: "Manage repository-local project memory"
-  default_prompt: "Use $project-memory-manager to initialize, read, update, validate, or hand off docs/project-memory for a long-running Codex project."
+  short_description: "Maintain a lightweight project journal"
+  default_prompt: "Use $project-memory-manager to read or update docs/project-memory as a lightweight project journal: current status, activity log, decisions, and next handoff."
 
 policy:
   allow_implicit_invocation: false
