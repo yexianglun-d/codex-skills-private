@@ -31,7 +31,7 @@ Do not commit:
 
 Snapshot date: 2026-06-29
 
-- Non-system local skills: 29
+- Non-system local skills: 30
 - System skills noted but not vendored: 5
 - MCP servers: 7
 - Unique plugin entries: 18

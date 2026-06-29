@@ -39,6 +39,11 @@ The restored project-memory workflow uses:
 - `project-memory-manager` as the explicit-only lightweight project journal for repository-local `docs/project-memory/`.
 - `codex-project-orchestrator` only for advanced PRD decomposition, milestones, task boards, multi-thread coordination, progress audits, or integration planning.
 
+The restored design workflow uses:
+
+- `ai-design-router` as the auto-invoked router for UI, UX, frontend visual, Figma, motion, and visual QA tasks.
+- It selects the smallest useful specialist skill set and prevents default stacking of overlapping design skills.
+
 Important behavior:
 
 - `project-memory-manager` creates only four files: `00-current-status.md`, `01-activity-log.md`, `02-decisions.md`, and `03-next-handoff.md`.
