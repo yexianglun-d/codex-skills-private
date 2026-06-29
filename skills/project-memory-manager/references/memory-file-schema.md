@@ -92,6 +92,9 @@ docs/project-memory/
 - 非空验证记录是否包含 Task ID、命令/方式、结果和证据。
 - `VERIFIED` / `DONE` task 是否绑定 validation、handoff 和 accepted inbox archive。
 - `ACTIVE` ownership 是否存在父子路径或 mode 冲突。
-- `claim_ownership.sh` 是否在写入前校验 Task 存在、状态、可改范围和 ownership 冲突。
+- `claim_ownership.sh` 是否在写入前校验 Task 存在、状态、可改范围、路径语法和 ownership 冲突。
+- `claim_ownership.sh` / `release_ownership.sh` 是否使用 `docs/project-memory/.locks/ownership.lock.d` 原子目录锁。
+- `validate_project_memory.sh` 是否反查手写 ownership path 没有越出 Task 可改范围。
+- `inbox/archive/` 是否仍保留完整 thread update 结构和 review block。
 - `log_validation.sh` 是否能把验证证据写入 `08-validation-log.md` 的表格区域。
-- Git 可用且 `07-thread-handoff.md` 已跟踪时，是否删除过历史交接内容。
+- Git 可用且 `07-thread-handoff.md` 已跟踪时，working tree 或 staged diff 是否删除过历史交接内容。

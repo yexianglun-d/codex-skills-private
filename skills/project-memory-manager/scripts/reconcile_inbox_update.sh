@@ -75,7 +75,6 @@ UPDATE_FILE="$(cd "$(dirname "${UPDATE_FILE}")" && pwd)/$(basename "${UPDATE_FIL
 
 PENDING_DIR="${TARGET_ROOT}/docs/project-memory/inbox/thread-updates"
 ARCHIVE_DIR="${TARGET_ROOT}/docs/project-memory/inbox/archive"
-TASK_ID="$(grep -E "^- Task ID:" "${UPDATE_FILE}" | tail -n 1 | sed -E "s/^- Task ID:[[:space:]]*//" || true)"
 
 case "${UPDATE_FILE}" in
   "${PENDING_DIR}/"*.md) ;;
@@ -89,6 +88,8 @@ if [[ ! -f "${UPDATE_FILE}" ]]; then
   echo "ERROR missing file: ${UPDATE_FILE}" >&2
   exit 1
 fi
+
+TASK_ID="$(grep -E "^- Task ID:" "${UPDATE_FILE}" | tail -n 1 | sed -E "s/^- Task ID:[[:space:]]*//" || true)"
 
 if [[ ! "${TASK_ID}" =~ ^T-[0-9][0-9][0-9]$ ]]; then
   echo "ERROR update file must contain a valid '- Task ID: T-xxx' field" >&2

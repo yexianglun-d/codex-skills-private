@@ -67,6 +67,8 @@
 - 同一 `Owned Path` 不能有两个 `ACTIVE` 写锁。
 - 父子路径视为冲突，例如 `src` 与 `src/auth`。
 - `write` 与 `integration` 互斥；`integration` 与 `write/review/integration` 互斥。
+- `claim_ownership.sh` / `release_ownership.sh` 用 `docs/project-memory/.locks/ownership.lock.d` 原子目录锁保护检查-写入过程。
+- ownership 路径必须是仓库相对路径，禁止绝对路径和任何 `..` path component。
 - worker 结束、任务取消或集成完成后，把对应锁改为 `RELEASED`、`BLOCKED` 或 `STALE`。
 - 若任务必须共享路由、迁移、全局状态、公共组件等核心文件，先拆出集成任务，不给多个 worker 同时写。
 

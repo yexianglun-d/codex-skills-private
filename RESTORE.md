@@ -37,15 +37,16 @@ It does not copy `.system` skills and does not delete unrelated skills on the ta
 The restored project-memory workflow uses:
 
 - `codex-project-orchestrator` as the main-thread coordinator.
-- `project-memory-manager` as the explicit-only owner of repository-local `docs/project-memory/` v2 templates, validation, handoffs, inbox review, ownership claim/release, completion evidence binding, and session snapshots.
+- `project-memory-manager` as the explicit-only owner of repository-local `docs/project-memory/` v2 empty-table templates, validation, handoffs, inbox review, atomic ownership claim/release, completion evidence binding, and session snapshots.
 
 Important behavior:
 
 - `codex-project-orchestrator/scripts/init_project_control.sh` only forwards to `project-memory-manager`; it no longer creates legacy `docs/project`.
 - `project-memory-manager` uses `${CODEX_HOME:-$HOME/.codex}` in examples and scripts instead of a personal absolute path.
-- Run `project-memory-manager/scripts/claim_ownership.sh` before worker writes and `release_ownership.sh` when the task is done, blocked, or stale.
+- Run `project-memory-manager/scripts/claim_ownership.sh` before worker writes and `release_ownership.sh` when the task is done, blocked, or stale; these scripts use `docs/project-memory/.locks/ownership.lock.d` as an atomic process lock.
+- Ownership paths must be repository-relative and cannot contain absolute paths or `..` components.
 - Run `project-memory-manager/scripts/log_validation.sh` to add validation evidence inside the table.
-- Run `project-memory-manager/scripts/validate_project_memory.sh` after initializing or changing project memory files; `VERIFIED` / `DONE` tasks must have validation, handoff, and accepted inbox archive evidence.
+- Run `project-memory-manager/scripts/validate_project_memory.sh` after initializing or changing project memory files; it checks manual ownership scope, staged handoff deletions, full archive structure, and `VERIFIED` / `DONE` evidence binding.
 
 ## Step 2: Restore Global Rules
 

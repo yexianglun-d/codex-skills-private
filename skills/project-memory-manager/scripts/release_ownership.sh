@@ -14,6 +14,18 @@ TARGET_ROOT="."
 LOCK_ID=""
 STATUS="RELEASED"
 NOTE=""
+LOCK_DIR=""
+
+acquire_process_lock() {
+  local lock_parent="${TARGET_ROOT}/docs/project-memory/.locks"
+  LOCK_DIR="${lock_parent}/ownership.lock.d"
+  mkdir -p "${lock_parent}"
+  if ! mkdir "${LOCK_DIR}" 2>/dev/null; then
+    echo "ERROR ownership update is locked by another process: ${LOCK_DIR}" >&2
+    exit 1
+  fi
+  trap 'rm -rf "${LOCK_DIR}"' EXIT INT TERM
+}
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
@@ -61,6 +73,8 @@ if [[ ! -f "${LOCK_FILE}" ]]; then
   echo "ERROR missing ownership file: ${LOCK_FILE}" >&2
   exit 1
 fi
+
+acquire_process_lock
 
 tmp_file="$(mktemp)"
 

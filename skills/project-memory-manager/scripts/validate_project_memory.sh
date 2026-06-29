@@ -42,6 +42,7 @@ ACTIVE_PATHS=()
 ACTIVE_MODES=()
 ACTIVE_LINES=()
 TASK_STATES=()
+TASK_SCOPES=()
 COMPLETED_TASK_IDS=()
 VALIDATION_TASK_IDS=()
 HANDOFF_TASK_IDS=()
@@ -109,6 +110,10 @@ valid_review_status() {
 normalize_path() {
   local path
   path="$(trim "$1")"
+  if [[ "${path}" == /* ]]; then
+    printf '%s' "__INVALID_ABSOLUTE__:${path}"
+    return
+  fi
   path="${path#./}"
   while [[ "${path}" == *"//"* ]]; do
     path="${path//\/\//\/}"
@@ -117,7 +122,17 @@ normalize_path() {
   if [[ -z "${path}" ]]; then
     path="."
   fi
+  if [[ "${path}" == ".." || "${path}" == "../"* || "${path}" == *"/../"* || "${path}" == *"/.." ]]; then
+    printf '%s' "__INVALID_DOTDOT__:${path}"
+    return
+  fi
   printf '%s' "${path}"
+}
+
+path_is_valid() {
+  local normalized
+  normalized="$(normalize_path "$1")"
+  [[ "${normalized}" != __INVALID_* ]]
 }
 
 paths_overlap() {
@@ -137,6 +152,61 @@ modes_conflict() {
   [[ "${left}" == "read" || "${right}" == "read" ]] && return 1
   [[ "${left}" == "integration" || "${right}" == "integration" ]] && return 0
   [[ "${left}" == "write" && "${right}" == "write" ]] && return 0
+  return 1
+}
+
+path_within_scope() {
+  local path="$1"
+  local scope="$2"
+  local normalized_path token normalized_scope
+  path_is_valid "${path}" || return 1
+  normalized_path="$(normalize_path "${path}")"
+  scope="${scope//，/,}"
+  scope="${scope//;/,}"
+  scope="${scope//；/,}"
+  scope="${scope//、/,}"
+  IFS=',' read -r -a scope_items <<< "${scope}"
+  for token in "${scope_items[@]}"; do
+    token="$(trim "${token}")"
+    [[ -z "${token}" || "${token}" == "-" || "${token}" == "未分配" || "${token}" == "未创建" ]] && continue
+    if ! path_is_valid "${token}"; then
+      return 1
+    fi
+    normalized_scope="$(normalize_path "${token}")"
+    [[ "${normalized_scope}" == "*" ]] && return 0
+    [[ "${normalized_path}" == "${normalized_scope}" ]] && return 0
+    [[ "${normalized_path}" == "${normalized_scope}/"* ]] && return 0
+  done
+  return 1
+}
+
+scope_paths_valid() {
+  local scope="$1"
+  local token
+  scope="${scope//，/,}"
+  scope="${scope//;/,}"
+  scope="${scope//；/,}"
+  scope="${scope//、/,}"
+  IFS=',' read -r -a scope_items <<< "${scope}"
+  for token in "${scope_items[@]}"; do
+    token="$(trim "${token}")"
+    [[ -z "${token}" || "${token}" == "-" || "${token}" == "未分配" || "${token}" == "未创建" || "${token}" == "*" ]] && continue
+    path_is_valid "${token}" || return 1
+  done
+  return 0
+}
+
+task_scope_for() {
+  local task="$1"
+  local item id scope
+  for item in "${TASK_SCOPES[@]}"; do
+    id="${item%%$'\t'*}"
+    scope="${item#*$'\t'}"
+    if [[ "${id}" == "${task}" ]]; then
+      printf '%s' "${scope}"
+      return 0
+    fi
+  done
   return 1
 }
 
@@ -277,6 +347,7 @@ check_feature_map() {
       error "${rel}:${line_no}: ${state} feature requires verification record"
     fi
   done < <(iter_table_rows "${rel}" "${header}" 9)
+  return 0
 }
 
 check_milestones() {
@@ -303,6 +374,7 @@ check_milestones() {
       contains_value "${feature}" "${FEATURE_IDS[@]}" || error "${rel}:${line_no}: unknown Feature ID reference: ${feature}"
     done
   done < <(iter_table_rows "${rel}" "${header}" 6)
+  return 0
 }
 
 check_task_board() {
@@ -326,6 +398,7 @@ check_task_board() {
     contains_value "${id}" "${TASK_IDS[@]}" && error "${rel}:${line_no}: duplicate Task ID: ${id}"
     TASK_IDS+=("${id}")
     TASK_STATES+=("${id}:${state}")
+    TASK_SCOPES+=("${id}"$'\t'"${owned}")
     valid_state "${state}" || error "${rel}:${line_no}: invalid state: ${state}"
     if [[ "${feature}" =~ ^F-[0-9][0-9][0-9]$ ]]; then
       contains_value "${feature}" "${FEATURE_IDS[@]}" || error "${rel}:${line_no}: unknown Feature ID reference: ${feature}"
@@ -335,6 +408,9 @@ check_task_board() {
     if contains_value "${state}" READY IN_PROGRESS REVIEW VERIFIED DONE && is_placeholder "${owned}"; then
       error "${rel}:${line_no}: ${state} task requires owned file scope"
     fi
+    if ! is_placeholder "${owned}" && ! scope_paths_valid "${owned}"; then
+      error "${rel}:${line_no}: task writable scope contains invalid path syntax: ${owned}"
+    fi
     if contains_value "${state}" VERIFIED DONE && is_placeholder "${validation}"; then
       error "${rel}:${line_no}: ${state} task requires validation method"
     fi
@@ -342,6 +418,7 @@ check_task_board() {
       COMPLETED_TASK_IDS+=("${id}")
     fi
   done < <(iter_table_rows "${rel}" "${header}" 11)
+  return 0
 }
 
 check_validation_log() {
@@ -376,6 +453,7 @@ check_validation_log() {
     is_placeholder "${result}" && error "${rel}:${line_no}: validation row requires result"
     is_placeholder "${evidence}" && error "${rel}:${line_no}: validation row requires evidence"
   done < <(iter_table_rows "${rel}" "${header}" 7)
+  return 0
 }
 
 check_open_questions() {
@@ -397,12 +475,13 @@ check_open_questions() {
     QUESTION_IDS+=("${id}")
     valid_question_state "${state}" || error "${rel}:${line_no}: invalid question state: ${state}"
   done < <(iter_table_rows "${rel}" "${header}" 7)
+  return 0
 }
 
 check_ownership_locks() {
   local rel="10-ownership-locks.md"
   local header="| Lock ID | Task ID | Owner/Thread | Branch/Worktree | Owned Path | Mode | Status | Started At | Expires/Review At | Notes |"
-  local item line_no id task path mode status active_path existing_i existing_mode existing_path existing_line
+  local item line_no id task path mode status scope active_path existing_i existing_mode existing_path existing_line
   require_table "${rel}" "${header}" || return
   while IFS= read -r item; do
     line_no="${item%%|*}"
@@ -421,9 +500,15 @@ check_ownership_locks() {
     LOCK_IDS+=("${id}")
     if [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]]; then
       contains_value "${task}" "${TASK_IDS[@]}" || error "${rel}:${line_no}: unknown Task ID reference: ${task}"
+      if scope="$(task_scope_for "${task}")"; then
+        if ! path_within_scope "${path}" "${scope}"; then
+          error "${rel}:${line_no}: ownership path ${path} is outside task ${task} writable scope: ${scope}"
+        fi
+      fi
     else
       error "${rel}:${line_no}: invalid Task ID reference: ${task}"
     fi
+    path_is_valid "${path}" || error "${rel}:${line_no}: invalid ownership path syntax: ${path}"
     valid_lock_mode "${mode}" || error "${rel}:${line_no}: invalid Mode: ${mode}"
     valid_lock_status "${status}" || error "${rel}:${line_no}: invalid Status: ${status}"
     if [[ "${status}" == "ACTIVE" ]]; then
@@ -442,6 +527,7 @@ check_ownership_locks() {
       ACTIVE_LINES+=("${line_no}")
     fi
   done < <(iter_table_rows "${rel}" "${header}" 10)
+  return 0
 }
 
 extract_field() {
@@ -458,31 +544,45 @@ require_section() {
   grep -qE "^## ${section}$" "${file}" || error "${file#${TARGET_ROOT}/}: missing section ## ${section}"
 }
 
+check_thread_update_body() {
+  local file="$1"
+  local task feature status owned_files changed_files result noise_check
+  require_section "${file}" "Metadata"
+  require_section "${file}" "Scope"
+  require_section "${file}" "Facts To Merge"
+  require_section "${file}" "Validation Evidence"
+  require_section "${file}" "Noise Check"
+  task="$(extract_field "${file}" "Task ID")"
+  feature="$(extract_field "${file}" "Feature ID")"
+  status="$(extract_field "${file}" "Status")"
+  owned_files="$(extract_field "${file}" "Owned files")"
+  changed_files="$(extract_field "${file}" "Files changed")"
+  result="$(extract_field "${file}" "Result")"
+  noise_check="$(extract_field "${file}" "Anything speculative or unrelated removed")"
+  [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]] || error "${file#${TARGET_ROOT}/}: invalid or missing Task ID"
+  if [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]]; then
+    contains_value "${task}" "${TASK_IDS[@]}" || error "${file#${TARGET_ROOT}/}: unknown Task ID reference: ${task}"
+  fi
+  if [[ "${feature}" =~ ^F-[0-9][0-9][0-9]$ ]]; then
+    contains_value "${feature}" "${FEATURE_IDS[@]}" || error "${file#${TARGET_ROOT}/}: unknown Feature ID reference: ${feature}"
+  elif ! is_placeholder "${feature}"; then
+    error "${file#${TARGET_ROOT}/}: invalid Feature ID reference: ${feature}"
+  fi
+  valid_inbox_status "${status}" || error "${file#${TARGET_ROOT}/}: invalid Status: ${status}"
+  is_placeholder "${owned_files}" && error "${file#${TARGET_ROOT}/}: missing Owned files"
+  is_placeholder "${changed_files}" && error "${file#${TARGET_ROOT}/}: missing Files changed"
+  if contains_value "${status}" ready-for-review verified && is_placeholder "${result}"; then
+    error "${file#${TARGET_ROOT}/}: ${status} inbox update requires validation result"
+  fi
+  [[ "${noise_check}" == "yes" ]] || error "${file#${TARGET_ROOT}/}: Noise Check must confirm 'yes'"
+}
+
 check_inbox_updates() {
-  local file task feature status result
+  local file
   shopt -s nullglob
   for file in "${TARGET_DIR}/inbox/thread-updates/"*.md; do
     [[ "$(basename "${file}")" == "README.md" ]] && continue
-    require_section "${file}" "Metadata"
-    require_section "${file}" "Scope"
-    require_section "${file}" "Facts To Merge"
-    require_section "${file}" "Validation Evidence"
-    require_section "${file}" "Noise Check"
-    task="$(extract_field "${file}" "Task ID")"
-    feature="$(extract_field "${file}" "Feature ID")"
-    status="$(extract_field "${file}" "Status")"
-    [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]] || error "${file#${TARGET_ROOT}/}: invalid or missing Task ID"
-    contains_value "${task}" "${TASK_IDS[@]}" || error "${file#${TARGET_ROOT}/}: unknown Task ID reference: ${task}"
-    if [[ "${feature}" =~ ^F-[0-9][0-9][0-9]$ ]]; then
-      contains_value "${feature}" "${FEATURE_IDS[@]}" || error "${file#${TARGET_ROOT}/}: unknown Feature ID reference: ${feature}"
-    elif ! is_placeholder "${feature}"; then
-      error "${file#${TARGET_ROOT}/}: invalid Feature ID reference: ${feature}"
-    fi
-    valid_inbox_status "${status}" || error "${file#${TARGET_ROOT}/}: invalid Status: ${status}"
-    result="$(extract_field "${file}" "Result")"
-    if contains_value "${status}" ready-for-review verified && is_placeholder "${result}"; then
-      error "${file#${TARGET_ROOT}/}: ${status} inbox update requires validation result"
-    fi
+    check_thread_update_body "${file}"
   done
   shopt -u nullglob
 }
@@ -492,6 +592,7 @@ check_inbox_archive() {
   shopt -s nullglob
   for file in "${TARGET_DIR}/inbox/archive/"*.md; do
     [[ "$(basename "${file}")" == "README.md" ]] && continue
+    check_thread_update_body "${file}"
     task="$(extract_field "${file}" "Task ID")"
     status="$(extract_field "${file}" "Review Status")"
     reviewer="$(extract_field "${file}" "Reviewed By")"
@@ -523,6 +624,7 @@ check_handoff_task_ids() {
       HANDOFF_TASK_IDS+=("${task}")
     fi
   done < "${file}"
+  return 0
 }
 
 check_completed_task_evidence() {
@@ -550,17 +652,22 @@ check_decision_statuses() {
       contains_value "${status}" proposed accepted superseded || error "${rel}:${line_no}: invalid decision status: ${status}"
     fi
   done < "${file}"
+  return 0
 }
 
 check_handoff_append_only() {
   local rel="docs/project-memory/07-thread-handoff.md"
-  local deleted
+  local deleted staged_deleted
   [[ "${ALLOW_HANDOFF_REWRITE:-}" == "1" ]] && return
   git -C "${TARGET_ROOT}" rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
   git -C "${TARGET_ROOT}" ls-files --error-unmatch "${rel}" >/dev/null 2>&1 || return 0
   deleted="$(git -C "${TARGET_ROOT}" diff --unified=0 -- "${rel}" | awk '/^-[^-]/ { print; found=1 } END { exit found ? 0 : 1 }' || true)"
   if [[ -n "${deleted}" ]]; then
     error "${rel}: tracked handoff has deleted lines; append new handoff entries instead of rewriting history"
+  fi
+  staged_deleted="$(git -C "${TARGET_ROOT}" diff --cached --unified=0 -- "${rel}" | awk '/^-[^-]/ { print; found=1 } END { exit found ? 0 : 1 }' || true)"
+  if [[ -n "${staged_deleted}" ]]; then
+    error "${rel}: staged handoff diff has deleted lines; append new handoff entries instead of rewriting history"
   fi
 }
 

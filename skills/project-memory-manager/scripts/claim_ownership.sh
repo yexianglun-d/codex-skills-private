@@ -23,6 +23,7 @@ EXPIRES=""
 NOTES=""
 TASK_STATE=""
 TASK_SCOPE=""
+LOCK_DIR=""
 
 trim() {
   local value="$1"
@@ -34,6 +35,10 @@ trim() {
 normalize_path() {
   local path
   path="$(trim "$1")"
+  if [[ "${path}" == /* ]]; then
+    echo "ERROR absolute paths are not allowed in project-memory ownership: ${path}" >&2
+    exit 1
+  fi
   path="${path#./}"
   while [[ "${path}" == *"//"* ]]; do
     path="${path//\/\//\/}"
@@ -42,7 +47,22 @@ normalize_path() {
   if [[ -z "${path}" ]]; then
     path="."
   fi
+  if [[ "${path}" == ".." || "${path}" == "../"* || "${path}" == *"/../"* || "${path}" == *"/.." ]]; then
+    echo "ERROR '..' path components are not allowed in project-memory ownership: ${path}" >&2
+    exit 1
+  fi
   printf '%s' "${path}"
+}
+
+acquire_process_lock() {
+  local lock_parent="${TARGET_ROOT}/docs/project-memory/.locks"
+  LOCK_DIR="${lock_parent}/ownership.lock.d"
+  mkdir -p "${lock_parent}"
+  if ! mkdir "${LOCK_DIR}" 2>/dev/null; then
+    echo "ERROR ownership update is locked by another process: ${LOCK_DIR}" >&2
+    exit 1
+  fi
+  trap 'rm -rf "${LOCK_DIR}"' EXIT INT TERM
 }
 
 paths_overlap() {
@@ -196,6 +216,8 @@ TARGET_ROOT="$(cd "${TARGET_ROOT}" && pwd)"
 LOCK_FILE="${TARGET_ROOT}/docs/project-memory/10-ownership-locks.md"
 TASK_FILE="${TARGET_ROOT}/docs/project-memory/04-task-board.md"
 
+OWNED_PATH="$(normalize_path "${OWNED_PATH}")"
+
 if [[ ! -f "${LOCK_FILE}" ]]; then
   echo "ERROR missing ownership file: ${LOCK_FILE}" >&2
   exit 1
@@ -205,6 +227,8 @@ if [[ ! -f "${TASK_FILE}" ]]; then
   echo "ERROR missing task board: ${TASK_FILE}" >&2
   exit 1
 fi
+
+acquire_process_lock
 
 if ! load_task "${TASK_FILE}"; then
   echo "ERROR task does not exist in 04-task-board.md: ${TASK_ID}" >&2
@@ -223,12 +247,15 @@ fi
 
 if [[ -z "${LOCK_ID}" ]]; then
   next_num="$(
-    grep -Eo 'L-[0-9]{3}' "${LOCK_FILE}" \
+    (grep -Eo 'L-[0-9]{3}' "${LOCK_FILE}" || true) \
       | sed 's/L-//' \
       | sort -n \
       | tail -n 1 \
       | awk '{ if ($1 == "") print 1; else print $1 + 1 }'
   )"
+  if [[ -z "${next_num}" ]]; then
+    next_num="1"
+  fi
   LOCK_ID="$(printf 'L-%03d' "${next_num}")"
 fi
 
@@ -237,13 +264,16 @@ if [[ ! "${LOCK_ID}" =~ ^L-[0-9][0-9][0-9]$ ]]; then
   exit 1
 fi
 
-if awk -F'|' -v mode="${MODE}" -v path="$(normalize_path "${OWNED_PATH}")" '
+if awk -F'|' -v mode="${MODE}" -v path="${OWNED_PATH}" '
   function trim(value) {
     gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
     return value
   }
   function normalize(value) {
     value = trim(value)
+    if (value ~ /^\// || value == ".." || value ~ /^\.\.\// || value ~ /\/\.\.\// || value ~ /\/\.\.$/) {
+      return "\001INVALID"
+    }
     sub(/^\.\//, "", value)
     gsub(/\/+/, "/", value)
     sub(/\/$/, "", value)

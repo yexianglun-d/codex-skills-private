@@ -4,7 +4,6 @@
 
 | Task ID | Feature ID | 任务说明 | 类型 | 状态 | 负责线程 | 分支/Worktree | 可改文件范围 | 禁止修改 | 验收方式 | 最后更新 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| T-001 | F-001 |  | backend/frontend/docs/test/integration | TODO | 未分配 | 未创建 |  |  |  | 未更新 |
 
 ## 领取任务规则
 

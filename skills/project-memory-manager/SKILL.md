@@ -119,6 +119,8 @@ bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate
 - 并行前必须在 `10-ownership-locks.md` 记录活跃写入范围，或由主线程确认任务看板中不存在范围冲突。
 - 同一文件或父子目录不能同时存在冲突的 `ACTIVE` 写锁；如必须共享，先拆任务或指定集成线程。
 - `write` 与 `integration` 互斥；`integration` 与 `write/review/integration` 互斥。
+- `claim_ownership.sh` / `release_ownership.sh` 使用 `docs/project-memory/.locks/ownership.lock.d` 原子目录锁保护检查-写入过程；绕过脚本直接改文件仍不受系统强制保护。
+- ownership 路径必须是仓库相对路径，禁止绝对路径和任何 `..` path component。
 - worker 只能修改其 Task ID 对应的可改范围；越界修改必须在 inbox 上报中说明并等待主线程审核。
 - 集成前运行 `validate_project_memory.sh`，让脚本检查重复 Task/Feature ID、非法状态、缺失验证证据和重复 `ACTIVE` ownership。
 
