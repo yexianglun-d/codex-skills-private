@@ -35,6 +35,7 @@ Then read only the category file that matches the task:
 - Motion or animation: `05-motion-animation/README.md`
 - Visual assets: `06-visual-assets/README.md`
 - Visual QA or review: `07-qa-review/README.md`
+- Brand/style DESIGN.md references: `08-design-references/README.md`
 
 Do not read every category by default.
 
@@ -48,6 +49,7 @@ Do not read every category by default.
    - Motion
    - Asset generation
    - Visual QA/review
+   - Brand/style reference
 2. Check the project stack and existing conventions before selecting stack-specific skills.
 3. Select the smallest skill set.
 4. State the route in one concise line before doing work:
@@ -81,6 +83,7 @@ Design route: <primary skill> + <optional supporting skill> because <reason>.
 | GSAP animation | relevant `gsap-*` skill |
 | Visual/browser verification | `playwright` / `playwright-interactive` / `build-web-apps:frontend-testing-debugging` |
 | Pet/character/spritesheet asset | `hatch-pet` |
+| Build in a named brand/style direction | `08-design-references` + `frontend-design` or stack skill |
 
 ## Output Discipline
 

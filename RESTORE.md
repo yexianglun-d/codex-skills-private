@@ -43,6 +43,8 @@ The restored design workflow uses:
 
 - `ai-design-router` as the auto-invoked router for UI, UX, frontend visual, Figma, motion, and visual QA tasks.
 - It selects the smallest useful specialist skill set and prevents default stacking of overlapping design skills.
+- It vendors `VoltAgent/awesome-design-md` under `skills/ai-design-router/AI-Design-Library/08-design-references/` as a local `DESIGN.md` reference library.
+- `typeui` is documented as a candidate only; it is not installed as an MCP, CLI, plugin, or default skill.
 
 Important behavior:
 

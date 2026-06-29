@@ -12,6 +12,7 @@
 | GSAP animation | relevant `gsap-*` skill | framework-specific GSAP skill | generic motion advice |
 | Visual QA | Playwright/testing skill | `frontend-design` for review criteria | implementation-only skills |
 | Pet/character asset | `hatch-pet` | sprite/asset pipeline if available | layout/design-system skills |
+| Named brand/style reference | `08-design-references` | `frontend-design` or stack skill | unrelated brand files |
 
 ## Tie Breakers
 
@@ -20,3 +21,4 @@
 - If the UI task is in Vue, always consider `vue-code-discipline`.
 - If the task is only a visual review, do not edit code until the user asks for fixes.
 - If implementation touches a third-party UI library, query current docs with Context7.
+- If the user asks for an Apple/Linear/Stripe/etc. style, read only that specific design reference file, not the entire design reference collection.

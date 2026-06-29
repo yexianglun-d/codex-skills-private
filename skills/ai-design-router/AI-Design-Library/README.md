@@ -14,6 +14,7 @@ AI-Design-Library/
 ├── 05-motion-animation/
 ├── 06-visual-assets/
 ├── 07-qa-review/
+├── 08-design-references/
 └── 99-candidates/
 ```
 

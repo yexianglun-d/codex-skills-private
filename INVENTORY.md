@@ -10,7 +10,7 @@ These are vendored under `skills/` and can be restored directly.
 
 | Skill | Trigger policy | Notes |
 | --- | --- | --- |
-| `ai-design-router` | auto | Routes UI, UX, frontend visual, Figma, motion, and visual QA tasks to the smallest useful set of design-related skills. |
+| `ai-design-router` | auto | Routes UI, UX, frontend visual, Figma, motion, visual QA, and named `DESIGN.md` style-reference tasks to the smallest useful set of design-related skills. Vendors `VoltAgent/awesome-design-md` references; `typeui` remains a candidate only. |
 | `chronicle` | default | Local screen/history context skill. |
 | `codex-project-orchestrator` | explicit only | Advanced PRD decomposition, milestones, task boards, multi-thread coordination, progress audits, and integration planning. Use only when lightweight project history is not enough. |
 | `figma` | default | Figma MCP read/design-to-code helper. |

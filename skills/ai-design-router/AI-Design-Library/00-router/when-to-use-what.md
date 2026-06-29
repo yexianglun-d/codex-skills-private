@@ -34,6 +34,7 @@ If the request is:
 - "Add scroll animation" -> GSAP or framework motion
 - "Check whether this UI looks right" -> visual QA
 - "Design the product flow" -> product UX
+- "Make it like Apple/Linear/Stripe/etc." -> design references + frontend or stack skill
 
 ## Avoid Skill Pileups
 
