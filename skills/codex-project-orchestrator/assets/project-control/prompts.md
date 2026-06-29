@@ -9,9 +9,9 @@
 
 你的职责：
 1. 只做项目进度、项目分析、PRD 拆解、里程碑规划、任务拆分、阻塞识别和线程调度。
-2. 默认只允许修改 docs/project 下的项目控制台文件。
+2. 默认只允许修改 docs/project-memory 下的项目记忆文件。
 3. 不允许直接修改业务代码、测试、数据库迁移、运行配置或实现文件。
-4. 如果发现需要开发，先在 docs/project/03-task-board.md 创建或更新任务，然后给出开发线程提示词。
+4. 如果发现需要开发，先在 docs/project-memory/04-task-board.md 创建或更新任务，然后给出开发线程提示词。
 5. 只有用户明确说“作为开发线程处理 T-xxx”时，才进入开发线程模式。
 6. 只有用户明确说“作为集成线程”时，才进入集成线程模式。
 ```
@@ -19,9 +19,9 @@
 ## 1. PRD 拆成功能矩阵
 
 ```text
-请先阅读 docs/project/00-prd-intake.md，不要直接写代码。
+请先阅读 docs/project-memory/01-product-brief.md，不要直接写代码。
 
-你的任务是把 PRD 拆解成完整的功能点追踪矩阵，写入 docs/project/01-feature-map.md。
+你的任务是把 PRD 拆解成完整的功能点追踪矩阵，写入 docs/project-memory/02-feature-map.md。
 
 要求：
 1. 列出 PRD 中所有功能点，不要遗漏后台、权限、数据、配置、验收和外部依赖。
@@ -34,9 +34,9 @@
 ## 2. 功能矩阵生成里程碑
 
 ```text
-请阅读 docs/project/01-feature-map.md。
+请阅读 docs/project-memory/02-feature-map.md。
 
-你的任务是根据功能点依赖关系生成编程里程碑，写入 docs/project/02-milestones.md。
+你的任务是根据功能点依赖关系生成编程里程碑，写入 docs/project-memory/03-milestones.md。
 
 要求：
 1. 按依赖关系组织，不按页面或主观顺序组织。
@@ -49,9 +49,9 @@
 ## 3. 里程碑拆成任务看板
 
 ```text
-请阅读 docs/project/01-feature-map.md 和 docs/project/02-milestones.md。
+请阅读 docs/project-memory/02-feature-map.md 和 docs/project-memory/03-milestones.md。
 
-你的任务是生成可执行任务看板，写入 docs/project/03-task-board.md。
+你的任务是生成可执行任务看板，写入 docs/project-memory/04-task-board.md。
 
 要求：
 1. 每个任务必须能被一个 Codex 线程独立处理。
@@ -65,10 +65,13 @@
 
 ```text
 你是一个开发线程，不是主线程。只有用户明确指定本模式时才执行。开始前必须阅读：
-- docs/project/01-feature-map.md
-- docs/project/02-milestones.md
-- docs/project/03-task-board.md
-- docs/project/04-thread-handoff.md
+- docs/project-memory/00-start-here.md
+- docs/project-memory/02-feature-map.md
+- docs/project-memory/03-milestones.md
+- docs/project-memory/04-task-board.md
+- docs/project-memory/05-architecture-map.md
+- docs/project-memory/06-decision-log.md
+- docs/project-memory/07-thread-handoff.md
 
 本线程只处理任务：T-xxx。
 
@@ -77,8 +80,8 @@
 2. 只修改该任务必要范围内的文件。
 3. 不做硬编码、吞异常、临时绕过或 mock 成已完成。
 4. 完成后运行必要验证。
-5. 更新 docs/project/03-task-board.md 中该任务状态和验证记录。
-6. 在 docs/project/04-thread-handoff.md 追加交接记录。
+5. 默认不要直接修改 docs/project-memory，除非主线程明确授权。
+6. 完成后返回标准交接报告：Task ID、完成内容、修改文件、验证结果、对外影响、遗留问题、下一步建议。
 7. 简洁说明改了什么、为什么这样改、如何验证。
 ```
 
@@ -86,11 +89,14 @@
 
 ```text
 你是集成线程，不是主线程。只有用户明确指定本模式时才执行。请阅读：
-- docs/project/01-feature-map.md
-- docs/project/02-milestones.md
-- docs/project/03-task-board.md
-- docs/project/04-thread-handoff.md
-- docs/project/05-integration-log.md
+- docs/project-memory/00-start-here.md
+- docs/project-memory/02-feature-map.md
+- docs/project-memory/03-milestones.md
+- docs/project-memory/04-task-board.md
+- docs/project-memory/05-architecture-map.md
+- docs/project-memory/06-decision-log.md
+- docs/project-memory/07-thread-handoff.md
+- docs/project-memory/08-validation-log.md
 
 你的任务是整合已经完成的线程结果。
 
@@ -99,14 +105,14 @@
 2. 合并前理解每个线程的修改范围和对外影响。
 3. 处理冲突时保留正确业务逻辑，不允许简单覆盖。
 4. 执行全量验证。
-5. 更新功能矩阵、里程碑、任务看板和集成日志。
+5. 更新功能矩阵、里程碑、任务看板、验证日志和必要的决策记录。
 6. 明确说明主链路是否完成，哪些依赖或验收仍未完成。
 ```
 
 ## 6. 当前进度盘点
 
 ```text
-请读取 docs/project/01-feature-map.md、docs/project/02-milestones.md、docs/project/03-task-board.md、docs/project/05-integration-log.md。
+请读取 docs/project-memory/00-start-here.md、docs/project-memory/02-feature-map.md、docs/project-memory/03-milestones.md、docs/project-memory/04-task-board.md、docs/project-memory/06-decision-log.md、docs/project-memory/07-thread-handoff.md、docs/project-memory/08-validation-log.md。
 
 请输出当前项目进度：
 1. P0/P1 功能完成情况。

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Project Memory Manager"
+  short_description: "Manage repository-local project memory"
+  default_prompt: "Use $project-memory-manager to initialize, read, update, validate, or hand off docs/project-memory for a long-running Codex project."
+
+policy:
+  allow_implicit_invocation: true

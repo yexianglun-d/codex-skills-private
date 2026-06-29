@@ -29,13 +29,13 @@ Do not commit:
 
 ## Current Snapshot
 
-Snapshot date: 2026-06-25
+Snapshot date: 2026-06-29
 
-- Non-system local skills: 28
+- Non-system local skills: 29
 - System skills noted but not vendored: 5
 - MCP servers: 7
-- Unique plugin entries: 17
-- Plugin-provided skill files observed in cache: 82
+- Unique plugin entries: 18
+- Plugin-provided skill files observed in cache: 87
 
 ## Quick Restore
 

@@ -1,6 +1,6 @@
 # Inventory
 
-Snapshot date: 2026-06-25
+Snapshot date: 2026-06-29
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.
 
@@ -11,7 +11,7 @@ These are vendored under `skills/` and can be restored directly.
 | Skill | Trigger policy | Notes |
 | --- | --- | --- |
 | `chronicle` | default | Local screen/history context skill. |
-| `codex-project-orchestrator` | explicit only | Main-thread project progress, milestones, task board, and thread handoff. |
+| `codex-project-orchestrator` | explicit only | Main-thread orchestration for project progress, milestones, task board, worker dispatch, and validation. Uses `project-memory-manager` for persistence. |
 | `figma` | default | Figma MCP read/design-to-code helper. |
 | `figma-code-connect-components` | default | Figma Code Connect component mapping. |
 | `figma-create-design-system-rules` | default | Generate project-specific Figma design system rules. |
@@ -33,6 +33,7 @@ These are vendored under `skills/` and can be restored directly.
 | `playwright` | default | Browser automation from terminal. |
 | `playwright-interactive` | default | Persistent browser/Electron interaction. |
 | `product-co-creator` | default | Product idea to MVP, flows, requirements, roadmap. |
+| `project-memory-manager` | auto | Repository-local `docs/project-memory` initialization, project state, decisions, handoffs, validation logs, and session snapshots. |
 | `root-cause-fixer` | default | Reproduce, diagnose, fix, and validate bugs. |
 | `taste-skill` | explicit only | Anti-template frontend visual direction; main skill name is `design-taste-frontend`. |
 | `technical-solution-designer` | default | PRD/product plan to technical architecture and APIs. |
@@ -69,14 +70,15 @@ Unique plugin entries observed on the source machine:
 
 | Plugin | Version / Build | Source type |
 | --- | --- | --- |
-| `browser` | `26.616.81150` | openai-bundled |
-| `chrome` | `26.616.81150` | openai-bundled |
-| `computer-use` | `1.0.829` | openai-bundled |
+| `browser` | `26.623.42026` | openai-bundled |
+| `chrome` | `26.623.42026` | openai-bundled |
+| `computer-use` | `1.0.857` | openai-bundled |
 | `build-ios-apps` | `0.1.2` | openai-curated-remote |
 | `build-web-apps` | `0.1.2` | openai-curated |
 | `figma` | `2.0.12` | openai-curated / remote cache |
 | `game-studio` | `0.1.2` | openai-curated |
 | `github` | `0.1.6` | openai-curated |
+| `google-drive` | `0.1.7` | openai-curated-remote |
 | `heygen` | `2.2.4` | openai-curated |
 | `hyperframes` | `0.1.2` | openai-curated |
 | `remotion` | `1.0.3` | openai-curated |
@@ -101,6 +103,7 @@ These are not vendored in `skills/`; restore them by installing/enabling the cor
 | `figma` | `figma-code-connect`, `figma-create-new-file`, `figma-generate-design`, `figma-generate-diagram`, `figma-generate-library`, `figma-implement-motion`, `figma-swiftui`, `figma-use`, `figma-use-figjam`, `figma-use-motion`, `figma-use-slides` |
 | `game-studio` | `game-playtest`, `game-studio`, `game-ui-frontend`, `phaser-2d-game`, `react-three-fiber-game`, `sprite-pipeline`, `three-webgl-game`, `web-3d-asset-pipeline`, `web-game-foundations` |
 | `github` | `gh-address-comments`, `gh-fix-ci`, `github`, `yeet` |
+| `google-drive` | `google-docs`, `google-drive`, `google-drive-comments`, `google-sheets`, `google-slides` |
 | `heygen` | `heygen-avatar`, `heygen-video` |
 | `hyperframes` | `gsap`, `hyperframes`, `hyperframes-cli`, `hyperframes-registry`, `website-to-hyperframes` |
 | `remotion` | `remotion` |

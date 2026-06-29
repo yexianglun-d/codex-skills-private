@@ -34,6 +34,11 @@ The script copies each skill directory by name into:
 
 It does not copy `.system` skills and does not delete unrelated skills on the target machine.
 
+The restored project-memory workflow uses:
+
+- `codex-project-orchestrator` as the main-thread coordinator.
+- `project-memory-manager` as the only owner of repository-local `docs/project-memory/` templates, validation, handoffs, and session snapshots.
+
 ## Step 2: Restore Global Rules
 
 If the target machine should use the same global Codex rules:

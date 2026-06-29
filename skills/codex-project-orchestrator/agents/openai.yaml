@@ -1,6 +1,6 @@
 interface:
   display_name: "Codex Project Orchestrator"
   short_description: "Plan Codex multi-thread project execution"
-  default_prompt: "Use $codex-project-orchestrator as the main project thread to analyze progress, initialize project control docs, and create milestones, tasks, and handoffs."
+  default_prompt: "Use $codex-project-orchestrator as the main project thread to analyze progress, initialize docs/project-memory, and create milestones, tasks, handoffs, and validation records."
 policy:
   allow_implicit_invocation: false

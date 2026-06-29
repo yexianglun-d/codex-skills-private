@@ -4,22 +4,16 @@ set -euo pipefail
 usage() {
   cat <<'USAGE'
 Usage:
-  init_project_control.sh [repo-root] [--force]
+  init_project_memory.sh [repo-root] [--force]
 
-Compatibility wrapper. Prefer project-memory-manager.
-Creates docs/project-memory files when project-memory-manager is installed.
+Creates docs/project-memory files for Codex project memory.
 Existing files are not overwritten unless --force is provided.
 USAGE
 }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-TEMPLATE_DIR="${SKILL_DIR}/assets/project-control"
-MEMORY_INIT="${HOME}/.codex/skills/project-memory-manager/scripts/init_project_memory.sh"
-
-if [[ -x "${MEMORY_INIT}" ]]; then
-  exec "${MEMORY_INIT}" "$@"
-fi
+TEMPLATE_DIR="${SKILL_DIR}/assets/project-memory"
 
 TARGET_ROOT="."
 FORCE="false"
@@ -40,16 +34,17 @@ for arg in "$@"; do
 done
 
 TARGET_ROOT="$(cd "${TARGET_ROOT}" && pwd)"
-TARGET_DIR="${TARGET_ROOT}/docs/project"
+TARGET_DIR="${TARGET_ROOT}/docs/project-memory"
 
 mkdir -p "${TARGET_DIR}"
 
 created=0
 skipped=0
 
-for template in "${TEMPLATE_DIR}"/*.md; do
-  name="$(basename "${template}")"
-  target="${TARGET_DIR}/${name}"
+while IFS= read -r template; do
+  rel="${template#${TEMPLATE_DIR}/}"
+  target="${TARGET_DIR}/${rel}"
+  mkdir -p "$(dirname "${target}")"
   if [[ -e "${target}" && "${FORCE}" != "true" ]]; then
     echo "SKIP ${target}"
     skipped=$((skipped + 1))
@@ -58,7 +53,11 @@ for template in "${TEMPLATE_DIR}"/*.md; do
   cp "${template}" "${target}"
   echo "WRITE ${target}"
   created=$((created + 1))
-done
+done < <(find "${TEMPLATE_DIR}" -type f | sort)
 
-echo "Project control initialized: ${TARGET_DIR}"
+echo "Project memory initialized: ${TARGET_DIR}"
 echo "Created or overwritten: ${created}; skipped: ${skipped}"
+
+if [[ -d "${TARGET_ROOT}/docs/project" ]]; then
+  echo "NOTE legacy docs/project exists; read it before migrating useful state."
+fi
