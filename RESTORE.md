@@ -37,7 +37,13 @@ It does not copy `.system` skills and does not delete unrelated skills on the ta
 The restored project-memory workflow uses:
 
 - `codex-project-orchestrator` as the main-thread coordinator.
-- `project-memory-manager` as the only owner of repository-local `docs/project-memory/` templates, validation, handoffs, and session snapshots.
+- `project-memory-manager` as the explicit-only owner of repository-local `docs/project-memory/` templates, validation, handoffs, inbox review, ownership locks, and session snapshots.
+
+Important behavior:
+
+- `codex-project-orchestrator/scripts/init_project_control.sh` only forwards to `project-memory-manager`; it no longer creates legacy `docs/project`.
+- `project-memory-manager` uses `${CODEX_HOME:-$HOME/.codex}` in examples and scripts instead of a personal absolute path.
+- Run `project-memory-manager/scripts/validate_project_memory.sh` after initializing or changing project memory files.
 
 ## Step 2: Restore Global Rules
 

@@ -12,53 +12,13 @@ Existing files are not overwritten unless --force is provided.
 USAGE
 }
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-TEMPLATE_DIR="${SKILL_DIR}/assets/project-control"
-MEMORY_INIT="${HOME}/.codex/skills/project-memory-manager/scripts/init_project_memory.sh"
+CODEX_HOME_DIR="${CODEX_HOME:-${HOME}/.codex}"
+MEMORY_INIT="${CODEX_HOME_DIR}/skills/project-memory-manager/scripts/init_project_memory.sh"
 
 if [[ -x "${MEMORY_INIT}" ]]; then
   exec "${MEMORY_INIT}" "$@"
 fi
 
-TARGET_ROOT="."
-FORCE="false"
-
-for arg in "$@"; do
-  case "$arg" in
-    --force)
-      FORCE="true"
-      ;;
-    -h|--help)
-      usage
-      exit 0
-      ;;
-    *)
-      TARGET_ROOT="$arg"
-      ;;
-  esac
-done
-
-TARGET_ROOT="$(cd "${TARGET_ROOT}" && pwd)"
-TARGET_DIR="${TARGET_ROOT}/docs/project"
-
-mkdir -p "${TARGET_DIR}"
-
-created=0
-skipped=0
-
-for template in "${TEMPLATE_DIR}"/*.md; do
-  name="$(basename "${template}")"
-  target="${TARGET_DIR}/${name}"
-  if [[ -e "${target}" && "${FORCE}" != "true" ]]; then
-    echo "SKIP ${target}"
-    skipped=$((skipped + 1))
-    continue
-  fi
-  cp "${template}" "${target}"
-  echo "WRITE ${target}"
-  created=$((created + 1))
-done
-
-echo "Project control initialized: ${TARGET_DIR}"
-echo "Created or overwritten: ${created}; skipped: ${skipped}"
+echo "ERROR missing project-memory-manager init script: ${MEMORY_INIT}" >&2
+echo "Install or restore the project-memory-manager skill; this wrapper no longer creates legacy docs/project." >&2
+exit 1

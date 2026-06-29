@@ -14,8 +14,11 @@ docs/project-memory/
   07-thread-handoff.md
   08-validation-log.md
   09-open-questions.md
+  10-ownership-locks.md
   inbox/
     README.md
+    archive/
+      README.md
     thread-updates/
   sessions/
     README.md
@@ -35,7 +38,9 @@ docs/project-memory/
 | `07-thread-handoff.md` | 线程和 worker 之间的交接记录 |
 | `08-validation-log.md` | 测试、构建、接口、浏览器、真实环境验证 |
 | `09-open-questions.md` | 未确认问题、阻塞、需用户决策项 |
+| `10-ownership-locks.md` | 并行线程的活跃文件/目录 ownership，防止互相覆盖 |
 | `inbox/thread-updates/` | worker/新线程提交给主线程审核的事实上报 |
+| `inbox/archive/` | 主线程已审核并标记结果的 worker 上报 |
 | `sessions/` | 每轮重要会话快照 |
 
 ## 新线程启动最低读取集
@@ -46,6 +51,7 @@ docs/project-memory/
 - `04-task-board.md`
 - `06-decision-log.md`
 - `07-thread-handoff.md`
+- `10-ownership-locks.md`
 - 与当前任务相关的 `05-architecture-map.md` 部分
 
 ## 完成任务最低写入集
@@ -59,6 +65,7 @@ docs/project-memory/
 然后由主线程审核并更新：
 
 - `04-task-board.md`
+- `10-ownership-locks.md`
 
 如果产生关键决策，还要追加：
 
@@ -70,3 +77,17 @@ docs/project-memory/
 - `05-architecture-map.md`
 
 这些核心文件默认由主线程写入；worker/新线程只上报事实。
+
+## 机器校验范围
+
+`validate_project_memory.sh` 至少检查：
+
+- 必需文件和目录是否存在。
+- Markdown 表格表头和分隔线是否可解析。
+- Feature、Task、Milestone、Question、Ownership ID 是否重复。
+- 状态、优先级、inbox review status 是否在枚举内。
+- Task 的 Feature ID 是否存在。
+- 非空验证记录是否包含证据。
+- `ACTIVE` ownership 是否存在重复文件/目录写入范围。
+- `claim_ownership.sh` 是否能把新 ownership 写入 `10-ownership-locks.md` 的表格区域。
+- Git 可用且 `07-thread-handoff.md` 已跟踪时，是否删除过历史交接内容。

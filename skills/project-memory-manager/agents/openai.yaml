@@ -4,4 +4,4 @@ interface:
   default_prompt: "Use $project-memory-manager to initialize, read, update, validate, or hand off docs/project-memory for a long-running Codex project."
 
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false

@@ -7,6 +7,7 @@
 - 交接只记录当前任务接续所必需的信息，不写泛化路线图和额外线程建议。
 - worker 不直接拥有项目总状态；worker 把事实写入 `inbox/thread-updates/`，主线程负责审核归档。
 - 并行 worker 必须有互不重叠的写入范围。
+- 并行 worker 开始前必须在 `10-ownership-locks.md` 记录 `ACTIVE` ownership，或由主线程明确说明该任务只读。
 
 ## Worker 派发模板
 
@@ -46,6 +47,7 @@
 - docs/project-memory/04-task-board.md
 - docs/project-memory/06-decision-log.md
 - docs/project-memory/07-thread-handoff.md
+- docs/project-memory/10-ownership-locks.md
 
 本线程目标：
 
@@ -150,3 +152,9 @@
 - `08-validation-log.md` 有验证记录或说明无法验证原因。
 - 修改文件范围没有和其他线程未集成工作冲突。
 - 共享文件、迁移、路由、全局状态、接口协议已单独检查。
+
+建议集成前运行：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate_project_memory.sh" .
+```

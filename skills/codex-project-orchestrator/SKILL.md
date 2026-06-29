@@ -84,7 +84,7 @@ Required files:
 To initialize the files, run:
 
 ```bash
-bash /Users/deng/.codex/skills/project-memory-manager/scripts/init_project_memory.sh .
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/init_project_memory.sh" .
 ```
 
 The script refuses to overwrite existing files unless called with `--force`.
@@ -98,9 +98,9 @@ Legacy `docs/project` directories are read-only context until the user explicitl
 When the user asks to create the workflow in a repo:
 
 1. Inspect the current working directory and existing `docs/project-memory` and legacy `docs/project` files.
-2. Run `/Users/deng/.codex/skills/project-memory-manager/scripts/init_project_memory.sh <repo-root>` if the files do not already exist.
+2. Run `"${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/init_project_memory.sh" <repo-root>` if the files do not already exist.
 3. If files already exist, read them and continue from current state instead of overwriting.
-4. Run `/Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_memory.sh <repo-root>` after initialization or structural edits.
+4. Run `"${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate_project_memory.sh" <repo-root>` after initialization or structural edits.
 5. Tell the user which files were created or already present.
 
 ### 2. Convert PRD Into Feature Map

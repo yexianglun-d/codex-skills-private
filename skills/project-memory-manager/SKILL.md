@@ -25,7 +25,7 @@ description: Manage repository-local Codex project memory files for explicit lon
 - 接收并整理 `inbox/thread-updates/` 中的线程上报
 - 生成会话快照
 - 为新线程或 worker 生成交接提示词
-- 校验项目记忆结构是否完整
+- 校验项目记忆结构、状态值、ID 引用、inbox 归档和并发 ownership 是否完整
 
 本 skill 不负责：
 
@@ -54,6 +54,12 @@ description: Manage repository-local Codex project memory files for explicit lon
 docs/project-memory/
 ```
 
+默认 skill 安装目录：
+
+```text
+${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/
+```
+
 如果旧项目已经存在 `docs/project/`，先读取旧目录，不要自动迁移。只有用户明确要求结构治理或迁移时，才把有效内容合并到 `docs/project-memory/`。
 
 ## 工作流程
@@ -66,7 +72,7 @@ docs/project-memory/
 3. 初始化时优先运行：
 
 ```bash
-bash /Users/deng/.codex/skills/project-memory-manager/scripts/init_project_memory.sh .
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/init_project_memory.sh" .
 ```
 
 4. 更新时只写 `docs/project-memory/` 下的必要文件，不改业务代码。
@@ -77,7 +83,7 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/init_project_memor
 9. 完成后运行结构校验：
 
 ```bash
-bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_memory.sh .
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate_project_memory.sh" .
 ```
 
 ## 单一事实源规则
@@ -103,8 +109,23 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_m
 | `07-thread-handoff.md` | 所有线程追加 | 只追加交接事实 |
 | `08-validation-log.md` | 所有线程追加 | 只追加验证证据 |
 | `09-open-questions.md` | 主线程 | 未决问题总表 |
+| `10-ownership-locks.md` | 主线程维护，worker 领取前追加 | 当前活跃任务的文件/目录写入权 |
 | `inbox/thread-updates/` | worker/新线程 | 待主线程审核归档的上报 |
+| `inbox/archive/` | 主线程 | 已审核的 inbox 上报 |
 | `sessions/` | 所有线程追加 | 会话快照 |
+
+## 并发控制
+
+- 并行前必须在 `10-ownership-locks.md` 记录活跃写入范围，或由主线程确认任务看板中不存在范围冲突。
+- 同一文件或目录不能同时存在两个 `ACTIVE` 写锁；如必须共享，先拆任务或指定集成线程。
+- worker 只能修改其 Task ID 对应的可改范围；越界修改必须在 inbox 上报中说明并等待主线程审核。
+- 集成前运行 `validate_project_memory.sh`，让脚本检查重复 Task/Feature ID、非法状态、缺失验证证据和重复 `ACTIVE` ownership。
+
+领取写入范围优先使用脚本，避免手写表格行写错位置：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/claim_ownership.sh" . --task T-001 --owner worker-name --path src/module --mode write
+```
 
 ## 噪音控制
 
@@ -129,8 +150,14 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_m
 1. worker/新线程完成任务后，在 `inbox/thread-updates/` 新增一份上报。
 2. 主线程读取上报，检查 Task ID、文件范围、验证证据和噪音内容。
 3. 主线程只把已确认事实合并到核心状态文件。
-4. 已处理上报移动或标记为 `accepted`、`partially-accepted`、`rejected`。
+4. 已处理上报必须标记为 `accepted`、`partially-accepted`、`rejected`，并移动到 `inbox/archive/`。
 5. 不确定内容进入 `09-open-questions.md`，不要写成已完成事实。
+
+可用脚本：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/reconcile_inbox_update.sh" . --file docs/project-memory/inbox/thread-updates/T-xxx.md --status accepted --reviewer main-thread --archive
+```
 
 ## 输出约束
 
