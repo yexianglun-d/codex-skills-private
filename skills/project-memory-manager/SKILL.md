@@ -25,7 +25,7 @@ description: Manage repository-local Codex project memory files for explicit lon
 - 接收并整理 `inbox/thread-updates/` 中的线程上报
 - 生成会话快照
 - 为新线程或 worker 生成交接提示词
-- 校验项目记忆结构、状态值、ID 引用、inbox 归档和并发 ownership 是否完整
+- 校验项目记忆结构、状态值、ID 引用、inbox 归档、完成证据链和并发 ownership 是否完整
 
 本 skill 不负责：
 
@@ -117,7 +117,8 @@ bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate
 ## 并发控制
 
 - 并行前必须在 `10-ownership-locks.md` 记录活跃写入范围，或由主线程确认任务看板中不存在范围冲突。
-- 同一文件或目录不能同时存在两个 `ACTIVE` 写锁；如必须共享，先拆任务或指定集成线程。
+- 同一文件或父子目录不能同时存在冲突的 `ACTIVE` 写锁；如必须共享，先拆任务或指定集成线程。
+- `write` 与 `integration` 互斥；`integration` 与 `write/review/integration` 互斥。
 - worker 只能修改其 Task ID 对应的可改范围；越界修改必须在 inbox 上报中说明并等待主线程审核。
 - 集成前运行 `validate_project_memory.sh`，让脚本检查重复 Task/Feature ID、非法状态、缺失验证证据和重复 `ACTIVE` ownership。
 
@@ -125,6 +126,18 @@ bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/validate
 
 ```bash
 bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/claim_ownership.sh" . --task T-001 --owner worker-name --path src/module --mode write
+```
+
+释放或标记 ownership：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/release_ownership.sh" . --lock L-002 --status RELEASED --note "worker done"
+```
+
+记录验证证据优先使用脚本，避免把行追加到表格外：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/log_validation.sh" . --task T-001 --scope "auth work" --method "npm test" --result "passed" --evidence "local log"
 ```
 
 ## 噪音控制
@@ -152,6 +165,12 @@ bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/claim_ow
 3. 主线程只把已确认事实合并到核心状态文件。
 4. 已处理上报必须标记为 `accepted`、`partially-accepted`、`rejected`，并移动到 `inbox/archive/`。
 5. 不确定内容进入 `09-open-questions.md`，不要写成已完成事实。
+
+`VERIFIED` / `DONE` 任务必须同时具备：
+
+- `08-validation-log.md` 中对应 Task ID 的验证证据。
+- `07-thread-handoff.md` 中对应 Task ID 的交接记录。
+- `inbox/archive/` 中对应 Task ID 且 `Review Status: accepted` 的归档上报。
 
 可用脚本：
 

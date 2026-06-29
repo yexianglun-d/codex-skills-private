@@ -16,6 +16,8 @@
 ## 规则
 
 - 同一 `Owned Path` 不能同时有两个 `ACTIVE` 写锁。
+- 父子路径视为冲突，例如 `src` 与 `src/auth`。
+- `write` 与 `integration` 互斥；`integration` 与 `write/review/integration` 互斥。
 - `Mode` 只允许 `read`、`write`、`review`、`integration`。
 - 共享核心文件优先拆成集成任务；不要让多个 worker 同时写。
 - worker 越界修改必须在 inbox 上报中说明原因和证据。

@@ -24,6 +24,8 @@ docs/project-memory/
     README.md
 ```
 
+当前 schema version：`project-memory/v2`，写在 `00-start-here.md` 顶部。
+
 ## 文件职责
 
 | 文件 | 职责 |
@@ -87,7 +89,9 @@ docs/project-memory/
 - Feature、Task、Milestone、Question、Ownership ID 是否重复。
 - 状态、优先级、inbox review status 是否在枚举内。
 - Task 的 Feature ID 是否存在。
-- 非空验证记录是否包含证据。
-- `ACTIVE` ownership 是否存在重复文件/目录写入范围。
-- `claim_ownership.sh` 是否能把新 ownership 写入 `10-ownership-locks.md` 的表格区域。
+- 非空验证记录是否包含 Task ID、命令/方式、结果和证据。
+- `VERIFIED` / `DONE` task 是否绑定 validation、handoff 和 accepted inbox archive。
+- `ACTIVE` ownership 是否存在父子路径或 mode 冲突。
+- `claim_ownership.sh` 是否在写入前校验 Task 存在、状态、可改范围和 ownership 冲突。
+- `log_validation.sh` 是否能把验证证据写入 `08-validation-log.md` 的表格区域。
 - Git 可用且 `07-thread-handoff.md` 已跟踪时，是否删除过历史交接内容。

@@ -7,7 +7,8 @@ Usage:
   claim_ownership.sh [repo-root] --task T-xxx --owner NAME --path PATH [--lock L-xxx] [--branch NAME] [--mode write|read|review|integration] [--expires TEXT] [--notes TEXT]
 
 Appends an ACTIVE ownership row to docs/project-memory/10-ownership-locks.md
-after checking that no identical active mode/path lock already exists.
+after checking the task exists, the path is inside the task's writable scope,
+and no overlapping active lock conflicts by mode.
 USAGE
 }
 
@@ -20,6 +21,112 @@ BRANCH="未创建"
 MODE="write"
 EXPIRES=""
 NOTES=""
+TASK_STATE=""
+TASK_SCOPE=""
+
+trim() {
+  local value="$1"
+  value="${value#"${value%%[![:space:]]*}"}"
+  value="${value%"${value##*[![:space:]]}"}"
+  printf '%s' "${value}"
+}
+
+normalize_path() {
+  local path
+  path="$(trim "$1")"
+  path="${path#./}"
+  while [[ "${path}" == *"//"* ]]; do
+    path="${path//\/\//\/}"
+  done
+  path="${path%/}"
+  if [[ -z "${path}" ]]; then
+    path="."
+  fi
+  printf '%s' "${path}"
+}
+
+paths_overlap() {
+  local left right
+  left="$(normalize_path "$1")"
+  right="$(normalize_path "$2")"
+  [[ "${left}" == "." || "${right}" == "." ]] && return 0
+  [[ "${left}" == "${right}" ]] && return 0
+  [[ "${left}" == "${right}/"* ]] && return 0
+  [[ "${right}" == "${left}/"* ]] && return 0
+  return 1
+}
+
+path_within_scope() {
+  local path="$1"
+  local scope="$2"
+  local normalized_path token normalized_scope
+  normalized_path="$(normalize_path "${path}")"
+  scope="${scope//，/,}"
+  scope="${scope//;/,}"
+  scope="${scope//；/,}"
+  scope="${scope//、/,}"
+  IFS=',' read -r -a scope_items <<< "${scope}"
+  for token in "${scope_items[@]}"; do
+    normalized_scope="$(normalize_path "${token}")"
+    [[ "${normalized_scope}" == "." || "${normalized_scope}" == "-" ]] && continue
+    [[ "${normalized_scope}" == "*" ]] && return 0
+    [[ "${normalized_path}" == "${normalized_scope}" ]] && return 0
+    [[ "${normalized_path}" == "${normalized_scope}/"* ]] && return 0
+  done
+  return 1
+}
+
+modes_conflict() {
+  local left="$1"
+  local right="$2"
+  [[ "${left}" == "read" || "${right}" == "read" ]] && return 1
+  [[ "${left}" == "integration" || "${right}" == "integration" ]] && return 0
+  [[ "${left}" == "write" && "${right}" == "write" ]] && return 0
+  return 1
+}
+
+task_status_allows_mode() {
+  local state="$1"
+  local mode="$2"
+  case "${mode}" in
+    write)
+      [[ "${state}" == "READY" || "${state}" == "IN_PROGRESS" ]]
+      ;;
+    integration)
+      [[ "${state}" == "REVIEW" || "${state}" == "VERIFIED" ]]
+      ;;
+    review)
+      [[ "${state}" == "REVIEW" || "${state}" == "VERIFIED" || "${state}" == "DONE" ]]
+      ;;
+    read)
+      return 0
+      ;;
+  esac
+}
+
+load_task() {
+  local task_file="$1"
+  local row
+  row="$(
+    awk -F'|' -v task="${TASK_ID}" '
+      $0 ~ /^\|/ {
+        for (i = 1; i <= NF; i++) {
+          gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
+        }
+        if ($2 == task) {
+          print $6 "\t" $9
+          found = 1
+          exit
+        }
+      }
+      END { exit found ? 0 : 1 }
+    ' "${task_file}" || true
+  )"
+  [[ -n "${row}" ]] || return 1
+  TASK_STATE="${row%%$'\t'*}"
+  TASK_SCOPE="${row#*$'\t'}"
+  return 0
+}
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
@@ -87,9 +194,30 @@ fi
 
 TARGET_ROOT="$(cd "${TARGET_ROOT}" && pwd)"
 LOCK_FILE="${TARGET_ROOT}/docs/project-memory/10-ownership-locks.md"
+TASK_FILE="${TARGET_ROOT}/docs/project-memory/04-task-board.md"
 
 if [[ ! -f "${LOCK_FILE}" ]]; then
   echo "ERROR missing ownership file: ${LOCK_FILE}" >&2
+  exit 1
+fi
+
+if [[ ! -f "${TASK_FILE}" ]]; then
+  echo "ERROR missing task board: ${TASK_FILE}" >&2
+  exit 1
+fi
+
+if ! load_task "${TASK_FILE}"; then
+  echo "ERROR task does not exist in 04-task-board.md: ${TASK_ID}" >&2
+  exit 1
+fi
+
+if ! task_status_allows_mode "${TASK_STATE}" "${MODE}"; then
+  echo "ERROR task ${TASK_ID} state ${TASK_STATE} cannot claim ${MODE} ownership" >&2
+  exit 1
+fi
+
+if ! path_within_scope "${OWNED_PATH}" "${TASK_SCOPE}"; then
+  echo "ERROR path ${OWNED_PATH} is outside task ${TASK_ID} writable scope: ${TASK_SCOPE}" >&2
   exit 1
 fi
 
@@ -109,18 +237,47 @@ if [[ ! "${LOCK_ID}" =~ ^L-[0-9][0-9][0-9]$ ]]; then
   exit 1
 fi
 
-if awk -F'|' -v mode="${MODE}" -v path="${OWNED_PATH}" '
+if awk -F'|' -v mode="${MODE}" -v path="$(normalize_path "${OWNED_PATH}")" '
+  function trim(value) {
+    gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+    return value
+  }
+  function normalize(value) {
+    value = trim(value)
+    sub(/^\.\//, "", value)
+    gsub(/\/+/, "/", value)
+    sub(/\/$/, "", value)
+    if (value == "") {
+      value = "."
+    }
+    return value
+  }
+  function overlaps(left, right) {
+    left = normalize(left)
+    right = normalize(right)
+    if (left == "." || right == ".") return 1
+    if (left == right) return 1
+    if (index(left, right "/") == 1) return 1
+    if (index(right, left "/") == 1) return 1
+    return 0
+  }
+  function conflicts(left, right) {
+    if (left == "read" || right == "read") return 0
+    if (left == "integration" || right == "integration") return 1
+    if (left == "write" && right == "write") return 1
+    return 0
+  }
   $0 ~ /^\|/ {
     for (i = 1; i <= NF; i++) {
       gsub(/^[[:space:]]+|[[:space:]]+$/, "", $i)
     }
-    if ($7 == mode && $8 == "ACTIVE" && $6 == path) {
+    if ($8 == "ACTIVE" && overlaps(path, $6) && conflicts(mode, $7)) {
       found = 1
     }
   }
   END { exit found ? 0 : 1 }
 ' "${LOCK_FILE}"; then
-  echo "ERROR ACTIVE ownership already exists for ${MODE}:${OWNED_PATH}" >&2
+  echo "ERROR ACTIVE ownership conflict exists for ${MODE}:${OWNED_PATH}" >&2
   exit 1
 fi
 

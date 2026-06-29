@@ -65,6 +65,8 @@
 并行派发前，主线程必须检查或更新 `10-ownership-locks.md`：
 
 - 同一 `Owned Path` 不能有两个 `ACTIVE` 写锁。
+- 父子路径视为冲突，例如 `src` 与 `src/auth`。
+- `write` 与 `integration` 互斥；`integration` 与 `write/review/integration` 互斥。
 - worker 结束、任务取消或集成完成后，把对应锁改为 `RELEASED`、`BLOCKED` 或 `STALE`。
 - 若任务必须共享路由、迁移、全局状态、公共组件等核心文件，先拆出集成任务，不给多个 worker 同时写。
 
@@ -72,6 +74,18 @@
 
 ```bash
 bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/claim_ownership.sh" . --task T-001 --owner worker-name --path src/module --mode write
+```
+
+释放 ownership 用脚本：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/release_ownership.sh" . --lock L-002 --status RELEASED --note "worker done"
+```
+
+记录验证证据用脚本：
+
+```bash
+bash "${CODEX_HOME:-$HOME/.codex}/skills/project-memory-manager/scripts/log_validation.sh" . --task T-001 --scope "auth work" --method "npm test" --result "passed" --evidence "local log"
 ```
 
 ## Worker 规则
@@ -89,6 +103,12 @@ worker 默认不直接改核心项目记忆，除非主线程明确授权。work
 worker 可以追加 `07-thread-handoff.md` 和 `08-validation-log.md`；核心状态文件由主线程归档。
 
 主线程筛掉无关建议后，再把必要事实写入 `04-task-board.md`、`07-thread-handoff.md`、`08-validation-log.md` 和必要的 `06-decision-log.md`。
+
+`VERIFIED` / `DONE` 任务必须有三类证据：
+
+- `08-validation-log.md` 的同 Task ID 验证记录。
+- `07-thread-handoff.md` 的同 Task ID 交接记录。
+- `inbox/archive/` 的同 Task ID 且 `Review Status: accepted` 归档。
 
 ## Inbox 归档流程
 

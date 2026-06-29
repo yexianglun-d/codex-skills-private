@@ -150,6 +150,7 @@
 - `04-task-board.md` 中任务状态不是 `TODO` 或无边界的 `IN_PROGRESS`。
 - `07-thread-handoff.md` 有对应任务记录。
 - `08-validation-log.md` 有验证记录或说明无法验证原因。
+- `VERIFIED` / `DONE` 任务有同 Task ID 的 validation、handoff 和 accepted inbox archive。
 - 修改文件范围没有和其他线程未集成工作冲突。
 - 共享文件、迁移、路由、全局状态、接口协议已单独检查。
 

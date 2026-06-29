@@ -6,9 +6,9 @@ usage() {
 Usage:
   validate_project_memory.sh [repo-root]
 
-Checks docs/project-memory structure, Markdown tables, IDs, states, validation
-evidence, inbox review lifecycle, ownership conflicts, and tracked handoff
-append-only behavior.
+Checks docs/project-memory schema, Markdown tables, IDs, states, validation
+evidence, inbox review lifecycle, ownership path conflicts, completion evidence,
+and tracked handoff append-only behavior.
 
 Set ALLOW_HANDOFF_REWRITE=1 to bypass the Git append-only deletion check.
 USAGE
@@ -39,6 +39,13 @@ MILESTONE_IDS=()
 QUESTION_IDS=()
 LOCK_IDS=()
 ACTIVE_PATHS=()
+ACTIVE_MODES=()
+ACTIVE_LINES=()
+TASK_STATES=()
+COMPLETED_TASK_IDS=()
+VALIDATION_TASK_IDS=()
+HANDOFF_TASK_IDS=()
+ACCEPTED_INBOX_TASK_IDS=()
 
 error() {
   echo "ERROR $*" >&2
@@ -97,6 +104,40 @@ valid_inbox_status() {
 
 valid_review_status() {
   contains_value "$1" accepted partially-accepted rejected
+}
+
+normalize_path() {
+  local path
+  path="$(trim "$1")"
+  path="${path#./}"
+  while [[ "${path}" == *"//"* ]]; do
+    path="${path//\/\//\/}"
+  done
+  path="${path%/}"
+  if [[ -z "${path}" ]]; then
+    path="."
+  fi
+  printf '%s' "${path}"
+}
+
+paths_overlap() {
+  local left right
+  left="$(normalize_path "$1")"
+  right="$(normalize_path "$2")"
+  [[ "${left}" == "." || "${right}" == "." ]] && return 0
+  [[ "${left}" == "${right}" ]] && return 0
+  [[ "${left}" == "${right}/"* ]] && return 0
+  [[ "${right}" == "${left}/"* ]] && return 0
+  return 1
+}
+
+modes_conflict() {
+  local left="$1"
+  local right="$2"
+  [[ "${left}" == "read" || "${right}" == "read" ]] && return 1
+  [[ "${left}" == "integration" || "${right}" == "integration" ]] && return 0
+  [[ "${left}" == "write" && "${right}" == "write" ]] && return 0
+  return 1
 }
 
 is_placeholder() {
@@ -205,6 +246,10 @@ check_required_files() {
   if [[ -d "${TARGET_ROOT}/docs/project" ]]; then
     warn "legacy docs/project exists; keep it read-only unless the user explicitly migrates it"
   fi
+
+  if ! grep -q 'Schema Version: `project-memory/v2`' "${TARGET_DIR}/00-start-here.md"; then
+    error "00-start-here.md: missing Schema Version: project-memory/v2"
+  fi
 }
 
 check_feature_map() {
@@ -280,6 +325,7 @@ check_task_board() {
     [[ "${id}" =~ ^T-[0-9][0-9][0-9]$ ]] || error "${rel}:${line_no}: invalid Task ID: ${id}"
     contains_value "${id}" "${TASK_IDS[@]}" && error "${rel}:${line_no}: duplicate Task ID: ${id}"
     TASK_IDS+=("${id}")
+    TASK_STATES+=("${id}:${state}")
     valid_state "${state}" || error "${rel}:${line_no}: invalid state: ${state}"
     if [[ "${feature}" =~ ^F-[0-9][0-9][0-9]$ ]]; then
       contains_value "${feature}" "${FEATURE_IDS[@]}" || error "${rel}:${line_no}: unknown Feature ID reference: ${feature}"
@@ -292,34 +338,44 @@ check_task_board() {
     if contains_value "${state}" VERIFIED DONE && is_placeholder "${validation}"; then
       error "${rel}:${line_no}: ${state} task requires validation method"
     fi
+    if contains_value "${state}" VERIFIED DONE; then
+      COMPLETED_TASK_IDS+=("${id}")
+    fi
   done < <(iter_table_rows "${rel}" "${header}" 11)
 }
 
 check_validation_log() {
   local rel="08-validation-log.md"
-  local header="| 日期 | 范围 | 命令/方式 | 结果 | 证据 | 备注 |"
-  local item line_no date scope method result evidence
+  local header="| 日期 | Task ID | 范围 | 命令/方式 | 结果 | 证据 | 备注 |"
+  local item line_no date task scope method result evidence
   require_table "${rel}" "${header}" || return
   while IFS= read -r item; do
     line_no="${item%%|*}"
     split_markdown_row "$(sed -n "${line_no}p" "${TARGET_DIR}/${rel}")"
-    if [[ "${#ROW_CELLS[@]}" -ne 6 ]]; then
-      error "${rel}:${line_no}: expected 6 table columns, got ${#ROW_CELLS[@]}"
+    if [[ "${#ROW_CELLS[@]}" -ne 7 ]]; then
+      error "${rel}:${line_no}: expected 7 table columns, got ${#ROW_CELLS[@]}"
       continue
     fi
     date="${ROW_CELLS[0]:-}"
-    scope="${ROW_CELLS[1]:-}"
-    method="${ROW_CELLS[2]:-}"
-    result="${ROW_CELLS[3]:-}"
-    evidence="${ROW_CELLS[4]:-}"
-    if is_placeholder "${date}" && is_placeholder "${scope}" && is_placeholder "${method}" && is_placeholder "${result}" && is_placeholder "${evidence}"; then
+    task="${ROW_CELLS[1]:-}"
+    scope="${ROW_CELLS[2]:-}"
+    method="${ROW_CELLS[3]:-}"
+    result="${ROW_CELLS[4]:-}"
+    evidence="${ROW_CELLS[5]:-}"
+    if is_placeholder "${date}" && is_placeholder "${task}" && is_placeholder "${scope}" && is_placeholder "${method}" && is_placeholder "${result}" && is_placeholder "${evidence}"; then
       continue
+    fi
+    if [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]]; then
+      contains_value "${task}" "${TASK_IDS[@]}" || error "${rel}:${line_no}: unknown Task ID reference: ${task}"
+      VALIDATION_TASK_IDS+=("${task}")
+    else
+      error "${rel}:${line_no}: validation row requires Task ID"
     fi
     is_placeholder "${scope}" && error "${rel}:${line_no}: validation row requires scope"
     is_placeholder "${method}" && error "${rel}:${line_no}: validation row requires command or method"
     is_placeholder "${result}" && error "${rel}:${line_no}: validation row requires result"
     is_placeholder "${evidence}" && error "${rel}:${line_no}: validation row requires evidence"
-  done < <(iter_table_rows "${rel}" "${header}" 6)
+  done < <(iter_table_rows "${rel}" "${header}" 7)
 }
 
 check_open_questions() {
@@ -346,7 +402,7 @@ check_open_questions() {
 check_ownership_locks() {
   local rel="10-ownership-locks.md"
   local header="| Lock ID | Task ID | Owner/Thread | Branch/Worktree | Owned Path | Mode | Status | Started At | Expires/Review At | Notes |"
-  local item line_no id task path mode status active_path
+  local item line_no id task path mode status active_path existing_i existing_mode existing_path existing_line
   require_table "${rel}" "${header}" || return
   while IFS= read -r item; do
     line_no="${item%%|*}"
@@ -372,9 +428,18 @@ check_ownership_locks() {
     valid_lock_status "${status}" || error "${rel}:${line_no}: invalid Status: ${status}"
     if [[ "${status}" == "ACTIVE" ]]; then
       is_placeholder "${path}" && error "${rel}:${line_no}: ACTIVE lock requires Owned Path"
-      active_path="${mode}:${path}"
-      contains_value "${active_path}" "${ACTIVE_PATHS[@]}" && error "${rel}:${line_no}: duplicate ACTIVE ownership for ${path}"
+      active_path="$(normalize_path "${path}")"
+      for ((existing_i = 0; existing_i < ${#ACTIVE_PATHS[@]}; existing_i++)); do
+        existing_path="${ACTIVE_PATHS[$existing_i]}"
+        existing_mode="${ACTIVE_MODES[$existing_i]}"
+        existing_line="${ACTIVE_LINES[$existing_i]}"
+        if paths_overlap "${active_path}" "${existing_path}" && modes_conflict "${mode}" "${existing_mode}"; then
+          error "${rel}:${line_no}: ACTIVE ${mode}:${active_path} conflicts with line ${existing_line} ${existing_mode}:${existing_path}"
+        fi
+      done
       ACTIVE_PATHS+=("${active_path}")
+      ACTIVE_MODES+=("${mode}")
+      ACTIVE_LINES+=("${line_no}")
     fi
   done < <(iter_table_rows "${rel}" "${header}" 10)
 }
@@ -423,18 +488,50 @@ check_inbox_updates() {
 }
 
 check_inbox_archive() {
-  local file status reviewer reviewed_at
+  local file task status reviewer reviewed_at
   shopt -s nullglob
   for file in "${TARGET_DIR}/inbox/archive/"*.md; do
     [[ "$(basename "${file}")" == "README.md" ]] && continue
+    task="$(extract_field "${file}" "Task ID")"
     status="$(extract_field "${file}" "Review Status")"
     reviewer="$(extract_field "${file}" "Reviewed By")"
     reviewed_at="$(extract_field "${file}" "Reviewed At")"
+    if [[ "${task}" =~ ^T-[0-9][0-9][0-9]$ ]]; then
+      contains_value "${task}" "${TASK_IDS[@]}" || error "${file#${TARGET_ROOT}/}: unknown Task ID reference: ${task}"
+      if [[ "${status}" == "accepted" ]]; then
+        ACCEPTED_INBOX_TASK_IDS+=("${task}")
+      fi
+    else
+      error "${file#${TARGET_ROOT}/}: invalid or missing Task ID"
+    fi
     valid_review_status "${status}" || error "${file#${TARGET_ROOT}/}: invalid or missing Review Status"
     is_placeholder "${reviewer}" && error "${file#${TARGET_ROOT}/}: missing Reviewed By"
     is_placeholder "${reviewed_at}" && error "${file#${TARGET_ROOT}/}: missing Reviewed At"
   done
   shopt -u nullglob
+}
+
+check_handoff_task_ids() {
+  local rel="07-thread-handoff.md"
+  local file="${TARGET_DIR}/${rel}"
+  local line_no=0 line task
+  while IFS= read -r line; do
+    line_no=$((line_no + 1))
+    if [[ "${line}" =~ ^-[[:space:]]*Task[[:space:]]ID:[[:space:]]*(T-[0-9][0-9][0-9])[[:space:]]*$ ]]; then
+      task="${BASH_REMATCH[1]}"
+      contains_value "${task}" "${TASK_IDS[@]}" || error "${rel}:${line_no}: unknown Task ID reference: ${task}"
+      HANDOFF_TASK_IDS+=("${task}")
+    fi
+  done < "${file}"
+}
+
+check_completed_task_evidence() {
+  local task
+  for task in "${COMPLETED_TASK_IDS[@]}"; do
+    contains_value "${task}" "${VALIDATION_TASK_IDS[@]}" || error "04-task-board.md: ${task} is VERIFIED/DONE but has no 08-validation-log evidence"
+    contains_value "${task}" "${HANDOFF_TASK_IDS[@]}" || error "04-task-board.md: ${task} is VERIFIED/DONE but has no 07-thread-handoff entry"
+    contains_value "${task}" "${ACCEPTED_INBOX_TASK_IDS[@]}" || error "04-task-board.md: ${task} is VERIFIED/DONE but has no accepted inbox archive"
+  done
 }
 
 check_decision_statuses() {
@@ -478,6 +575,8 @@ if [[ "${ERRORS}" -eq 0 ]]; then
   check_ownership_locks
   check_inbox_updates
   check_inbox_archive
+  check_handoff_task_ids
+  check_completed_task_evidence
   check_decision_statuses
   check_handoff_append_only
 fi

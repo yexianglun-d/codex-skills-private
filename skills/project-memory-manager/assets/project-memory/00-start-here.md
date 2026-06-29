@@ -2,6 +2,8 @@
 
 这是新 Codex 线程继续本项目时的第一入口。
 
+Schema Version: `project-memory/v2`
+
 ## 项目一句话
 
 - 待填写：

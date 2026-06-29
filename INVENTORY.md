@@ -33,7 +33,7 @@ These are vendored under `skills/` and can be restored directly.
 | `playwright` | default | Browser automation from terminal. |
 | `playwright-interactive` | default | Persistent browser/Electron interaction. |
 | `product-co-creator` | default | Product idea to MVP, flows, requirements, roadmap. |
-| `project-memory-manager` | explicit only | Repository-local `docs/project-memory` initialization, project state, decisions, handoffs, validation logs, session snapshots, inbox review, and ownership checks. |
+| `project-memory-manager` | explicit only | Repository-local `docs/project-memory` v2 initialization, project state, decisions, handoffs, validation logs, session snapshots, inbox review, ownership claim/release, path conflict checks, and completion evidence binding. |
 | `root-cause-fixer` | default | Reproduce, diagnose, fix, and validate bugs. |
 | `taste-skill` | explicit only | Anti-template frontend visual direction; main skill name is `design-taste-frontend`. |
 | `technical-solution-designer` | default | PRD/product plan to technical architecture and APIs. |
