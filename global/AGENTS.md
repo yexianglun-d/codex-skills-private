@@ -21,6 +21,15 @@
 - 涉及复杂 Bug、架构设计、迁移方案、多模块改造、技术选型或高风险决策时，优先使用 sequential-thinking 做结构化分析，再执行。
 - 普通小改动、明确的局部修复或无需外部资料的任务，不强制调用 MCP，避免增加不必要成本。
 
+## Skill 调用规则
+
+- `$codex-project-orchestrator` 和 `$project-memory-manager` 都是主动调用 skill，不允许因普通小任务隐式触发；但遇到以下场景时，必须显式点名使用。
+- 当用户提出 PRD、产品想法、灵感、模糊需求、大功能、多模块目标、需要主线程控制进度、生成里程碑/任务看板、盘点项目进度或规划多线程协作时，必须使用 `$codex-project-orchestrator`。
+- `$codex-project-orchestrator` 默认按主线程执行，只做项目分析、需求拆分、里程碑、任务看板、线程边界、进度判断和交接提示；除非用户明确切换角色，否则不直接改业务代码。
+- 当用户要求初始化、覆盖重建、读取、更新、校验或归档 `docs/project-memory/`，记录项目状态、写入 handoff、validation、decision、inbox/archive、ownership，或准备新线程继续项目时，必须使用 `$project-memory-manager`。
+- `$project-memory-manager` 只负责项目记忆文件和结构校验，不负责业务代码实现，也不替代 `$codex-project-orchestrator` 做任务调度。
+- 普通小改动、局部 Bug 修复、改文案、一次性问答、只读状态查询、提交推送，默认不调用这两个 skill；除非用户明确要求写入项目记忆、主线程分析或跨线程协作。
+
 ## 需求拆分与项目推进
 
 - 当用户提出 PRD、产品想法、灵感、模糊需求、大功能、多模块目标或需要连续开发的项目时，先进行需求整理和拆分，不要直接进入编码。
