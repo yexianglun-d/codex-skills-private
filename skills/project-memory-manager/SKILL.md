@@ -1,6 +1,6 @@
 ---
 name: project-memory-manager
-description: Manage repository-local Codex project memory files for long-running or multi-thread development. Use when initializing docs/project-memory, updating project state, creating task boards, recording decisions, writing thread handoffs, logging validation, generating session snapshots, or preparing a new Codex thread to continue a project. This skill writes project memory only; it is not a coding implementation skill.
+description: Manage repository-local Codex project memory files for explicit long-running or multi-thread development workflows. Use when the user asks to initialize docs/project-memory, record project state, create task boards, record decisions, write thread handoffs, log validation, generate session snapshots, or prepare a new Codex thread to continue a project. Do not use for ordinary one-off coding, commit/push, or generic status tasks unless the user explicitly asks to record them into project memory. This skill writes concise project memory only; it is not a coding implementation skill.
 ---
 
 # Project Memory Manager
@@ -8,6 +8,8 @@ description: Manage repository-local Codex project memory files for long-running
 ## 定位
 
 这是一个项目级记忆管理 skill。它把长期项目上下文落到仓库内的 `docs/project-memory/`，让主线程、开发线程、worker、新线程都通过文件同步事实，而不是依赖聊天历史或模型记忆。
+
+核心原则：只归档本轮任务相关事实、已验证证据、明确阻塞和用户已确认的下一步。不要为了“可能有用”生成泛化建议。
 
 优先级：用户当轮要求 > 项目内更具体规则 > 本 skill > 通用记忆习惯。
 
@@ -39,7 +41,7 @@ description: Manage repository-local Codex project memory files for long-running
 - worker 或开发线程完成后需要生成或整理 handoff
 - 新线程接手前需要读取项目状态源
 
-普通小改动、单次 Bug 修复、一次性问答不强制使用。
+普通小改动、单次 Bug 修复、一次性问答、提交推送、只读状态查询不使用，除非用户明确要求“写入项目记忆”。
 
 ## 标准路径
 
@@ -81,6 +83,24 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_m
 - 聊天历史、模型记忆、worker final message 只能作为输入，不能替代项目记忆文件。
 - 同一项目不要同时维护多套任务看板；如果存在旧 `docs/project/`，需标注为 legacy 或合并迁移。
 - 主线程默认拥有项目记忆写入权；worker 默认返回报告，由主线程归档。
+
+## 噪音控制
+
+以下内容默认不写入项目记忆：
+
+- 和本轮任务没有直接关系的“以后可以做”“建议考虑”“上线前最好”等泛化建议。
+- 没有用户确认、没有任务 ID、没有当前阻塞证据的线程建议。
+- 大而全的路线图、技术栈迁移、重构建议、压测计划、上线清单。
+- 从历史记忆里联想到但本轮没有重新验证的事实。
+
+只有满足以下任一条件，才记录下一步：
+
+- 用户明确要求规划下一步。
+- 当前任务存在阻塞，且下一步是解除阻塞所必需。
+- 当前任务已完成，且有一个明确的直接后续任务 ID。
+- worker 交接必须说明下个线程从哪里继续。
+
+提交/推送类任务如果需要归档，只记录分支、提交号、推送结果、验证命令、排除文件和真实告警，不扩展成项目路线图。
 
 ## 输出约束
 

@@ -49,6 +49,8 @@ Main thread restrictions:
 - Do not silently switch into a development or integration thread.
 - Only edit repository-local project memory documents unless the user explicitly changes role.
 - If the user asks for implementation while still in main-thread mode, create or update the task entry and provide the exact development-thread prompt to run next.
+- Do not create speculative worker/thread suggestions. Only propose threads for READY tasks with clear ownership, validation, and direct relevance to the user's current goal.
+- Do not turn commit/push, verification, or narrow status tasks into broad project roadmaps unless the user asks for a progress audit.
 
 Development thread mode starts only when the user explicitly says they are starting a development thread and provides a task ID or a narrow task boundary.
 
@@ -177,6 +179,14 @@ Use only these task and feature states:
 - Use `07-thread-handoff.md`, not chat history, as the communication channel.
 - Use `04-task-board.md` for ownership and writable scope.
 - Use one integration thread to combine work and settle conflicts.
+
+## Noise Control
+
+When producing project memory or thread advice:
+
+- Record direct facts, current task state, validation evidence, blockers, and confirmed next actions.
+- Avoid generic future work such as broad refactors, module migration plans, pressure testing, launch checklists, or unrelated worker suggestions unless the user asks for those.
+- If a historical session is only a commit/push or verification thread, summarize it as such; do not expand it into a project strategy.
 
 ## Output Style
 

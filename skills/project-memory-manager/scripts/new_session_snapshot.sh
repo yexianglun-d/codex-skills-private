@@ -88,6 +88,8 @@ cat > "${target}" <<EOF
 
 ## Next Handoff
 
+Only include direct continuation steps for this task. Do not add generic roadmap suggestions.
+
 -
 EOF
 
