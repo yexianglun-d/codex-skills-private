@@ -27,6 +27,7 @@ These are vendored under `skills/` and can be restored directly.
 | `gsap-timeline` | default | GSAP timeline sequencing. |
 | `gsap-utils` | default | `gsap.utils` helpers. |
 | `hatch-pet` | default | Create, repair, validate, QA, and package Codex animated pets and spritesheets. |
+| `humanizer` | explicit only | Rewrite prose or Markdown to reduce AI-sounding patterns. Use only when explicitly asked to humanize, rewrite, or polish text. |
 | `implementation-planner` | default | Technical plan to implementation phases and task breakdown. |
 | `java-code-discipline` | auto | Java root-cause, project-style, minimal-change discipline. |
 | `liu-ying-chat-style` | explicit only | Private relationship/chat style skill. Keep private. |

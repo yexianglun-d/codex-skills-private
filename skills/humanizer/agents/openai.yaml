@@ -1,0 +1,6 @@
+interface:
+  display_name: "Humanizer"
+  short_description: "Rewrite text to reduce AI-sounding patterns"
+  default_prompt: "Use $humanizer only when explicitly asked to humanize, rewrite, or polish prose/Markdown so it sounds more natural and less AI-generated."
+policy:
+  allow_implicit_invocation: false

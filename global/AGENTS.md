@@ -25,6 +25,7 @@
 
 - `$ai-design-router` 是设计类 skill 路由器。当用户提出 UI、UX、前端视觉、页面/组件设计、重设计、Figma、设计系统、动效、视觉优化或视觉验收任务时，先使用它选择最小必要 skill 组合；它只负责路由，不直接实现 UI。
 - 设计类任务不要默认同时调用 `frontend-design`、`taste-skill`、`ui-ux-pro-max`、TypeUI 候选和 Figma/GSAP 全家桶；必须按 `$ai-design-router` 的判断选择 1-2 个核心 skill，只有用户明确要求完整设计到代码闭环时才增加。
+- `$humanizer` 是文本去 AI 味润色 skill，只在用户明确要求 humanize、改写、润色 Markdown/文案时使用；不要自动用于技术交付、Bug 根因、验证日志、项目记忆、代码解释或事实性文档。
 - `$project-memory-manager` 是轻量项目日志 skill，用来回答和维护“这个项目做过什么、现在停在哪、下个会话从哪里继续”。当用户要求继续项目、记录本次工作、初始化/更新项目记忆、回顾项目进度，或一个项目明显会跨多个 Codex 会话持续推进时，必须显式使用它。
 - `$project-memory-manager` 默认只维护 `docs/project-memory/00-current-status.md`、`01-activity-log.md`、`02-decisions.md`、`03-next-handoff.md`；不默认创建任务看板、ownership、inbox、worker 审核或复杂校验流程。
 - `$codex-project-orchestrator` 是高级项目编排 skill。只有当用户明确需要 PRD 拆解、功能点清单、里程碑、任务看板、多线程/多 worker 协作、集成计划或主线程进度分析时，才显式使用它。

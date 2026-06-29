@@ -46,6 +46,11 @@ The restored design workflow uses:
 - It vendors `VoltAgent/awesome-design-md` under `skills/ai-design-router/AI-Design-Library/08-design-references/` as a local `DESIGN.md` reference library.
 - `typeui` is documented as a candidate only; it is not installed as an MCP, CLI, plugin, or default skill.
 
+The restored writing workflow includes:
+
+- `humanizer` as an explicit-only prose/Markdown rewrite skill for reducing AI-sounding patterns.
+- It should not be used automatically for technical truth, validation logs, project memory, bug reports, or code explanations.
+
 Important behavior:
 
 - `project-memory-manager` creates only four files: `00-current-status.md`, `01-activity-log.md`, `02-decisions.md`, and `03-next-handoff.md`.
