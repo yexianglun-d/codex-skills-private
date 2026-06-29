@@ -11,6 +11,8 @@ description: Manage repository-local Codex project memory files for explicit lon
 
 核心原则：只归档本轮任务相关事实、已验证证据、明确阻塞和用户已确认的下一步。不要为了“可能有用”生成泛化建议。
 
+协作模型：主线程维护权威状态；其他线程通过 `inbox/thread-updates/`、`07-thread-handoff.md`、`08-validation-log.md` 上报事实；主线程审核后再合并到核心状态文件。
+
 优先级：用户当轮要求 > 项目内更具体规则 > 本 skill > 通用记忆习惯。
 
 ## 职责边界
@@ -20,6 +22,7 @@ description: Manage repository-local Codex project memory files for explicit lon
 - 初始化 `docs/project-memory/`
 - 读取当前项目状态
 - 更新功能地图、里程碑、任务看板、架构地图、决策日志、线程交接、验证日志和未决问题
+- 接收并整理 `inbox/thread-updates/` 中的线程上报
 - 生成会话快照
 - 为新线程或 worker 生成交接提示词
 - 校验项目记忆结构是否完整
@@ -67,10 +70,11 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/init_project_memor
 ```
 
 4. 更新时只写 `docs/project-memory/` 下的必要文件，不改业务代码。
-5. 关键技术、产品、验收口径变化必须写入 `06-decision-log.md`。
-6. 任务状态变化必须同步 `04-task-board.md`，必要时同步 `02-feature-map.md` 和 `03-milestones.md`。
-7. 线程或 worker 结束必须追加 `07-thread-handoff.md`，并按需要追加 `08-validation-log.md` 和 `sessions/` 快照。
-8. 完成后运行结构校验：
+5. 主线程可更新核心状态文件；worker/新线程默认只追加 handoff、validation 和 `inbox/thread-updates/`。
+6. 关键技术、产品、验收口径变化必须先由线程上报，主线程确认后写入 `06-decision-log.md`。
+7. 任务状态变化由主线程同步 `04-task-board.md`，必要时同步 `02-feature-map.md` 和 `03-milestones.md`。
+8. 线程或 worker 结束必须追加 `07-thread-handoff.md`，并按需要追加 `08-validation-log.md`、`inbox/thread-updates/` 和 `sessions/` 快照。
+9. 完成后运行结构校验：
 
 ```bash
 bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_memory.sh .
@@ -82,7 +86,25 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_m
 - `AGENTS.md` 只放长期协作规则，不放当前任务进度。
 - 聊天历史、模型记忆、worker final message 只能作为输入，不能替代项目记忆文件。
 - 同一项目不要同时维护多套任务看板；如果存在旧 `docs/project/`，需标注为 legacy 或合并迁移。
-- 主线程默认拥有项目记忆写入权；worker 默认返回报告，由主线程归档。
+- 主线程拥有核心状态写入权。
+- worker/新线程拥有事实上报权，不直接改核心状态文件，除非主线程明确授权。
+- 主线程定期读取 `inbox/thread-updates/`，筛掉噪音后归档到核心文件。
+
+## 写权限模型
+
+| 路径 | 默认写入者 | 规则 |
+| --- | --- | --- |
+| `00-start-here.md` | 主线程 | 权威入口摘要 |
+| `02-feature-map.md` | 主线程 | 功能状态总表 |
+| `03-milestones.md` | 主线程 | 里程碑状态 |
+| `04-task-board.md` | 主线程 | 任务分派、状态、文件边界 |
+| `05-architecture-map.md` | 主线程 | 架构和关键文件索引 |
+| `06-decision-log.md` | 主线程 | 已确认决策 |
+| `07-thread-handoff.md` | 所有线程追加 | 只追加交接事实 |
+| `08-validation-log.md` | 所有线程追加 | 只追加验证证据 |
+| `09-open-questions.md` | 主线程 | 未决问题总表 |
+| `inbox/thread-updates/` | worker/新线程 | 待主线程审核归档的上报 |
+| `sessions/` | 所有线程追加 | 会话快照 |
 
 ## 噪音控制
 
@@ -101,6 +123,14 @@ bash /Users/deng/.codex/skills/project-memory-manager/scripts/validate_project_m
 - worker 交接必须说明下个线程从哪里继续。
 
 提交/推送类任务如果需要归档，只记录分支、提交号、推送结果、验证命令、排除文件和真实告警，不扩展成项目路线图。
+
+## Inbox 归档流程
+
+1. worker/新线程完成任务后，在 `inbox/thread-updates/` 新增一份上报。
+2. 主线程读取上报，检查 Task ID、文件范围、验证证据和噪音内容。
+3. 主线程只把已确认事实合并到核心状态文件。
+4. 已处理上报移动或标记为 `accepted`、`partially-accepted`、`rejected`。
+5. 不确定内容进入 `09-open-questions.md`，不要写成已完成事实。
 
 ## 输出约束
 

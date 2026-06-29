@@ -10,6 +10,22 @@
 - 只记录本轮任务直接相关事实，不把“可能有用”的建议写入项目记忆。
 - 历史记忆只能作为线索；未在本轮确认的内容不要写成当前事实。
 
+## 写权限模型
+
+| 路径 | 默认写入者 | 规则 |
+| --- | --- | --- |
+| `00-start-here.md` | 主线程 | 权威入口摘要 |
+| `02-feature-map.md` | 主线程 | 功能状态总表 |
+| `03-milestones.md` | 主线程 | 里程碑状态 |
+| `04-task-board.md` | 主线程 | 任务分派、状态、文件边界 |
+| `05-architecture-map.md` | 主线程 | 架构和关键文件索引 |
+| `06-decision-log.md` | 主线程 | 已确认决策 |
+| `07-thread-handoff.md` | 所有线程追加 | 只追加交接事实 |
+| `08-validation-log.md` | 所有线程追加 | 只追加验证证据 |
+| `09-open-questions.md` | 主线程 | 未决问题总表 |
+| `inbox/thread-updates/` | worker/新线程 | 待主线程审核归档的上报 |
+| `sessions/` | 所有线程追加 | 会话快照 |
+
 ## 噪音控制
 
 默认不记录：
@@ -35,7 +51,8 @@
 - 维护 `00-start-here.md` 的当前入口摘要。
 - 维护功能、任务、决策、验证、交接记录。
 - 给 worker 或新线程生成明确提示词。
-- 接收 worker 结果后归档到项目记忆。
+- 接收 worker 结果后，先进入 `inbox/thread-updates/` 或读取已有 inbox，再归档到项目记忆。
+- 审核 inbox 上报，筛掉噪音、未验证判断和越界建议。
 
 主线程禁止：
 
@@ -45,7 +62,7 @@
 
 ## Worker 规则
 
-worker 默认不直接改核心项目记忆，除非主线程明确授权。worker 完成后必须返回：
+worker 默认不直接改核心项目记忆，除非主线程明确授权。worker 完成后必须追加或返回一份 `inbox/thread-updates/` 上报，包含：
 
 - Task ID
 - 完成内容
@@ -55,7 +72,17 @@ worker 默认不直接改核心项目记忆，除非主线程明确授权。work
 - 对外影响
 - 下一步仅限解除阻塞或接续当前任务所必需的动作
 
+worker 可以追加 `07-thread-handoff.md` 和 `08-validation-log.md`；核心状态文件由主线程归档。
+
 主线程筛掉无关建议后，再把必要事实写入 `04-task-board.md`、`07-thread-handoff.md`、`08-validation-log.md` 和必要的 `06-decision-log.md`。
+
+## Inbox 归档流程
+
+1. worker/新线程完成任务后，在 `inbox/thread-updates/` 新增一份上报。
+2. 主线程读取上报，检查 Task ID、文件范围、验证证据和噪音内容。
+3. 主线程只把已确认事实合并到核心状态文件。
+4. 已处理上报移动或标记为 `accepted`、`partially-accepted`、`rejected`。
+5. 不确定内容进入 `09-open-questions.md`，不要写成已完成事实。
 
 ## 状态规则
 

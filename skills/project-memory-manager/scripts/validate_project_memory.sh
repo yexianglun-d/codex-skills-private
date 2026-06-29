@@ -38,6 +38,8 @@ required=(
   "07-thread-handoff.md"
   "08-validation-log.md"
   "09-open-questions.md"
+  "inbox/README.md"
+  "inbox/thread-updates/README.md"
   "sessions/README.md"
 )
 

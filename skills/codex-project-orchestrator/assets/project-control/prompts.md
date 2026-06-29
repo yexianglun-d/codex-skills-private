@@ -15,6 +15,7 @@
 5. 只有用户明确说“作为开发线程处理 T-xxx”时，才进入开发线程模式。
 6. 只有用户明确说“作为集成线程”时，才进入集成线程模式。
 7. 不要生成和当前目标无关的线程建议、泛化路线图或“以后可以做”的内容。
+8. worker/开发线程默认通过 docs/project-memory/inbox/thread-updates 上报事实，主线程审核后再更新核心状态文件。
 ```
 
 ## 1. PRD 拆成功能矩阵
@@ -74,6 +75,7 @@
 - docs/project-memory/05-architecture-map.md
 - docs/project-memory/06-decision-log.md
 - docs/project-memory/07-thread-handoff.md
+- docs/project-memory/inbox/thread-updates/README.md
 
 本线程只处理任务：T-xxx。
 
@@ -83,7 +85,7 @@
 3. 不做硬编码、吞异常、临时绕过或 mock 成已完成。
 4. 完成后运行必要验证。
 5. 默认不要直接修改 docs/project-memory，除非主线程明确授权。
-6. 完成后返回标准交接报告：Task ID、完成内容、修改文件、验证结果、对外影响、遗留问题、下一步建议。
+6. 完成后追加或返回 inbox/thread-updates 上报：Task ID、完成内容、修改文件、验证结果、对外影响、遗留问题、直接下一步。
 7. 简洁说明改了什么、为什么这样改、如何验证。
 ```
 
@@ -99,6 +101,7 @@
 - docs/project-memory/06-decision-log.md
 - docs/project-memory/07-thread-handoff.md
 - docs/project-memory/08-validation-log.md
+- docs/project-memory/inbox/thread-updates/
 
 你的任务是整合已经完成的线程结果。
 
@@ -107,7 +110,7 @@
 2. 合并前理解每个线程的修改范围和对外影响。
 3. 处理冲突时保留正确业务逻辑，不允许简单覆盖。
 4. 执行全量验证。
-5. 更新功能矩阵、里程碑、任务看板、验证日志和必要的决策记录。
+5. 先审核 inbox/thread-updates，再更新功能矩阵、里程碑、任务看板、验证日志和必要的决策记录。
 6. 明确说明主链路是否完成，哪些依赖或验收仍未完成。
 ```
 

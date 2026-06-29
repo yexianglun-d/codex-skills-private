@@ -16,6 +16,12 @@ Core distinction:
 - `$project-memory-manager` = the only skill that owns project-memory initialization, file schema, session snapshots, validation, and handoff persistence.
 - Default invocation = main thread, not development thread.
 
+Project-memory authority model:
+
+- Main thread owns core state files.
+- Worker and new development threads submit facts through `inbox/thread-updates/`, `07-thread-handoff.md`, and `08-validation-log.md`.
+- Main thread reviews inbox updates and then changes `00-start-here.md`, `02-feature-map.md`, `03-milestones.md`, `04-task-board.md`, `05-architecture-map.md`, `06-decision-log.md`, and `09-open-questions.md`.
+
 ## Trigger Phrases
 
 Use this skill when the user asks for:
@@ -72,6 +78,7 @@ Required files:
 - `07-thread-handoff.md`: append-only thread and worker communication log.
 - `08-validation-log.md`: test, build, interface, browser, and real-environment evidence.
 - `09-open-questions.md`: unresolved questions and blockers.
+- `inbox/thread-updates/`: worker/new-thread fact reports awaiting main-thread review.
 - `sessions/`: session snapshots for important work.
 
 To initialize the files, run:
@@ -138,8 +145,8 @@ Only enter this mode when explicitly requested. When acting as a development thr
 3. Understand project structure and call chain before editing.
 4. Modify only the task's necessary scope.
 5. Validate locally.
-6. Return a standard worker/development-thread report.
-7. The main thread records status, validation, and handoff through `$project-memory-manager`.
+6. Append or return a standard `inbox/thread-updates/` report plus handoff/validation evidence.
+7. The main thread reviews inbox updates and records status, validation, and accepted facts through `$project-memory-manager`.
 
 Do not let a development thread silently expand scope or integrate other threads' work.
 
@@ -177,6 +184,7 @@ Use only these task and feature states:
 - One thread owns one task or one vertical slice.
 - Avoid concurrent edits to the same shared core files.
 - Use `07-thread-handoff.md`, not chat history, as the communication channel.
+- Use `inbox/thread-updates/` for worker facts that need main-thread review.
 - Use `04-task-board.md` for ownership and writable scope.
 - Use one integration thread to combine work and settle conflicts.
 

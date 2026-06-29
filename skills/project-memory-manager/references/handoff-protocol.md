@@ -5,7 +5,7 @@
 - 交接记录必须能让另一个 Codex 线程不依赖聊天历史继续工作。
 - 交接必须写清楚事实、证据和未完成项，不写乐观判断。
 - 交接只记录当前任务接续所必需的信息，不写泛化路线图和额外线程建议。
-- worker 不直接拥有项目总状态；主线程负责把 worker 报告归档。
+- worker 不直接拥有项目总状态；worker 把事实写入 `inbox/thread-updates/`，主线程负责审核归档。
 - 并行 worker 必须有互不重叠的写入范围。
 
 ## Worker 派发模板
@@ -27,11 +27,13 @@
 - 对外影响
 - 遗留问题
 - 下一步仅限解除阻塞或接续当前任务所必需的动作
+- 已写入或应写入的 inbox 文件路径
 
 注意：
 - 你不是唯一线程，不要回滚、覆盖或格式化他人改动。
 - 不要扩大任务范围。
-- 不要直接改 docs/project-memory，除非主线程明确授权。
+- 不要直接改 docs/project-memory 的核心状态文件，除非主线程明确授权。
+- 默认只追加 docs/project-memory/inbox/thread-updates、07-thread-handoff.md、08-validation-log.md、sessions/。
 ```
 
 ## 新线程接手模板
@@ -95,6 +97,48 @@
 
 ### 禁止重复做
 -
+```
+
+## Inbox 上报模板
+
+```md
+# Thread Update / T-xxx / thread-name / YYYY-MM-DD HH:mm
+
+## Metadata
+
+- Task ID:
+- Feature ID:
+- Thread:
+- Branch/Worktree:
+- Status: proposed / ready-for-review / blocked / verified
+
+## Scope
+
+- Owned files:
+- Files changed:
+- Files intentionally not touched:
+
+## Facts To Merge
+
+-
+
+## Validation Evidence
+
+- Commands:
+- Manual checks:
+- Result:
+
+## Blockers
+
+-
+
+## Direct Next Step
+
+-
+
+## Noise Check
+
+- Anything speculative or unrelated removed: yes/no
 ```
 
 ## 集成前检查

@@ -14,6 +14,9 @@ docs/project-memory/
   07-thread-handoff.md
   08-validation-log.md
   09-open-questions.md
+  inbox/
+    README.md
+    thread-updates/
   sessions/
     README.md
 ```
@@ -32,6 +35,7 @@ docs/project-memory/
 | `07-thread-handoff.md` | 线程和 worker 之间的交接记录 |
 | `08-validation-log.md` | 测试、构建、接口、浏览器、真实环境验证 |
 | `09-open-questions.md` | 未确认问题、阻塞、需用户决策项 |
+| `inbox/thread-updates/` | worker/新线程提交给主线程审核的事实上报 |
 | `sessions/` | 每轮重要会话快照 |
 
 ## 新线程启动最低读取集
@@ -48,9 +52,13 @@ docs/project-memory/
 
 完成一个任务后至少更新：
 
-- `04-task-board.md`
 - `07-thread-handoff.md`
 - `08-validation-log.md`
+- `inbox/thread-updates/`
+
+然后由主线程审核并更新：
+
+- `04-task-board.md`
 
 如果产生关键决策，还要追加：
 
@@ -60,3 +68,5 @@ docs/project-memory/
 
 - `02-feature-map.md`
 - `05-architecture-map.md`
+
+这些核心文件默认由主线程写入；worker/新线程只上报事实。
