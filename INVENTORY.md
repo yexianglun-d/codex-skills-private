@@ -1,6 +1,6 @@
 # Inventory
 
-Snapshot date: 2026-06-29
+Snapshot date: 2026-07-01
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.
 
@@ -13,6 +13,7 @@ These are vendored under `skills/` and can be restored directly.
 | `ai-design-router` | auto | Routes UI, UX, frontend visual, Figma, motion, visual QA, and named `DESIGN.md` style-reference tasks to the smallest useful set of design-related skills. Vendors `VoltAgent/awesome-design-md` references; `typeui` remains a candidate only. |
 | `chronicle` | default | Local screen/history context skill. |
 | `codex-project-orchestrator` | explicit only | Advanced PRD decomposition, milestones, task boards, multi-thread coordination, progress audits, and integration planning. Use only when lightweight project history is not enough. |
+| `coding-router` | auto | Routes code engineering tasks to the smallest useful debugging, language-discipline, planning, docs/MCP, and verification workflow. Avoids default stacking of root-cause, Java/Vue discipline, planning, and superpowers skills. |
 | `figma` | default | Figma MCP read/design-to-code helper. |
 | `figma-code-connect-components` | default | Figma Code Connect component mapping. |
 | `figma-create-design-system-rules` | default | Generate project-specific Figma design system rules. |

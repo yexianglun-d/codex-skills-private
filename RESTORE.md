@@ -46,6 +46,12 @@ The restored design workflow uses:
 - It vendors `VoltAgent/awesome-design-md` under `skills/ai-design-router/AI-Design-Library/08-design-references/` as a local `DESIGN.md` reference library.
 - `typeui` is documented as a candidate only; it is not installed as an MCP, CLI, plugin, or default skill.
 
+The restored coding workflow uses:
+
+- `coding-router` as the auto-invoked router for code engineering tasks: bugs, failing tests, build errors, new features, refactors, code reviews, Java/Vue discipline, third-party library/API/CLI usage, and completion verification.
+- It selects the smallest useful engineering workflow and prevents default stacking of `root-cause-fixer`, `java-code-discipline`, `vue-code-discipline`, `implementation-planner`, `technical-solution-designer`, and `superpowers` sub-skills.
+- It defers visual UI/UX/Figma work to `ai-design-router`, project memory to `project-memory-manager`, and formal PRD/milestone/multi-thread orchestration to `codex-project-orchestrator`.
+
 The restored writing workflow includes:
 
 - `humanizer` as an explicit-only prose/Markdown rewrite skill for reducing AI-sounding patterns.

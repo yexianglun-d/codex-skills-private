@@ -23,6 +23,9 @@
 
 ## Skill 调用规则
 
+- `$coding-router` 是代码工程类 skill 路由器。当用户提出 Bug 修复、报错排查、测试/构建失败、新功能实现、重构、代码评审、Java/Vue 代码规范、第三方库/API/CLI 用法或完成前验证任务时，先使用它选择最小必要工程 workflow；它只负责路由，不直接实现代码。
+- 代码工程任务不要默认同时调用 `root-cause-fixer`、`java-code-discipline`、`vue-code-discipline`、`implementation-planner`、`technical-solution-designer` 和 `superpowers` 全家桶；必须按 `$coding-router` 的判断选择 0-2 个核心 workflow。
+- 如果任务主要是 UI、UX、前端视觉、Figma、动效或视觉验收，优先走 `$ai-design-router`；如果只是项目记忆、PRD 拆解、里程碑或多线程编排，走 `$project-memory-manager` 或 `$codex-project-orchestrator`，不要让 `$coding-router` 接管项目管理。
 - `$ai-design-router` 是设计类 skill 路由器。当用户提出 UI、UX、前端视觉、页面/组件设计、重设计、Figma、设计系统、动效、视觉优化或视觉验收任务时，先使用它选择最小必要 skill 组合；它只负责路由，不直接实现 UI。
 - 设计类任务不要默认同时调用 `frontend-design`、`taste-skill`、`ui-ux-pro-max`、TypeUI 候选和 Figma/GSAP 全家桶；必须按 `$ai-design-router` 的判断选择 1-2 个核心 skill，只有用户明确要求完整设计到代码闭环时才增加。
 - `$humanizer` 是文本去 AI 味润色 skill，只在用户明确要求 humanize、改写、润色 Markdown/文案时使用；不要自动用于技术交付、Bug 根因、验证日志、项目记忆、代码解释或事实性文档。

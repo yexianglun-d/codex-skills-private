@@ -1,0 +1,6 @@
+interface:
+  display_name: "Coding Router"
+  short_description: "Route engineering tasks to debugging, planning, language, docs, and verification workflows"
+  default_prompt: "Use $coding-router to choose the smallest useful set of engineering workflows for the current code task."
+policy:
+  allow_implicit_invocation: true
