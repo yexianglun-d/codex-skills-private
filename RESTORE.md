@@ -11,6 +11,7 @@ This guide is for a new Codex machine or another AI agent receiving this reposit
 ## What Must Be Reconfigured Locally
 
 - Context7 API key
+- Firecrawl API key
 - GitHub MCP bearer token env var, if using GitHub MCP
 - Figma login, if using Figma MCP write/read operations
 - Postman OAuth login
@@ -85,6 +86,7 @@ Recommended commands:
 ```bash
 codex mcp add sequential-thinking --env DISABLE_THOUGHT_LOGGING=true -- npx -y @modelcontextprotocol/server-sequential-thinking
 codex mcp add context7 -- npx -y @upstash/context7-mcp
+codex mcp add firecrawl --env FIRECRAWL_API_KEY=<SET_IN_LOCAL_CODEX_CONFIG> -- npx -y firecrawl-mcp
 codex mcp add postman --url https://mcp.postman.com/mcp
 codex mcp add figma --url https://mcp.figma.com/mcp
 codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PAT_TOKEN
@@ -98,6 +100,17 @@ startup_timeout_sec = 20
 
 [mcp_servers.context7.env]
 CONTEXT7_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
+
+[mcp_servers.firecrawl.env]
+FIRECRAWL_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
+```
+
+For Firecrawl CLI:
+
+```bash
+npm install -g firecrawl-cli
+firecrawl login --api-key "$FIRECRAWL_API_KEY"
+firecrawl --status
 ```
 
 For Postman, authenticate locally if needed:

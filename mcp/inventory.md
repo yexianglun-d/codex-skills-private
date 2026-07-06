@@ -1,6 +1,6 @@
 # MCP Inventory
 
-Snapshot date: 2026-06-25
+Snapshot date: 2026-07-06
 
 This file records the MCP servers shown by `codex mcp list`. Use `config.sanitized.toml` for copyable user config blocks. Plugin-managed MCPs may be enabled by Codex/plugin state rather than by a direct block in `~/.codex/config.toml`.
 
@@ -10,6 +10,7 @@ This file records the MCP servers shown by `codex mcp list`. Use `config.sanitiz
 | --- | --- | --- | --- |
 | `computer-use` | Codex bundled plugin | stdio | Plugin-managed; reinstall/enable the Codex bundled Computer Use plugin if missing. |
 | `context7` | `~/.codex/config.toml` | stdio via `npx -y @upstash/context7-mcp` | Restore from `config.sanitized.toml`, then set `CONTEXT7_API_KEY` locally. |
+| `firecrawl` | `~/.codex/config.toml` | stdio via `npx -y firecrawl-mcp` | Restore from `config.sanitized.toml`, then set `FIRECRAWL_API_KEY` locally. |
 | `figma` | Codex/Figma MCP config | streamable HTTP | Restore URL from `config.sanitized.toml`; login was not active in the source snapshot. |
 | `github` | Codex/GitHub MCP config | streamable HTTP | Restore URL from `config.sanitized.toml`, then set `GITHUB_PAT_TOKEN` locally if needed. |
 | `node_repl` | `~/.codex/config.toml` / Codex app runtime | stdio | Restore from `config.sanitized.toml`; paths may vary by Codex app version. |
@@ -22,5 +23,5 @@ For plugins, use `../INVENTORY.md`. Do not restore plugins by copying cache dire
 
 ## Secret Handling
 
-- `CONTEXT7_API_KEY` is intentionally not stored here.
+- `CONTEXT7_API_KEY` and `FIRECRAWL_API_KEY` are intentionally not stored here.
 - OAuth credentials, Codex auth files, Figma login state, GitHub bearer tokens, and other secrets must remain local only.

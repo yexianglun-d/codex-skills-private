@@ -1,6 +1,6 @@
 # Inventory
 
-Snapshot date: 2026-07-01
+Snapshot date: 2026-07-06
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.
 
@@ -61,11 +61,18 @@ These are expected to come from Codex/system installation.
 | --- | --- | --- |
 | `computer-use` | enabled | Plugin-managed by Codex bundled Computer Use. |
 | `context7` | enabled | Restore config, then set `CONTEXT7_API_KEY` locally. |
+| `firecrawl` | enabled | Restore with `npx -y firecrawl-mcp`, then set `FIRECRAWL_API_KEY` locally. |
 | `figma` | enabled, not logged in | Restore URL; authenticate in Figma/Codex if design operations require login. |
 | `github` | enabled with bearer token env | Restore URL, then set `GITHUB_PAT_TOKEN` locally if this MCP is needed. |
 | `node_repl` | enabled | Codex app runtime managed; verify path on target machine. |
 | `sequential-thinking` | enabled | Restore with `npx -y @modelcontextprotocol/server-sequential-thinking`. |
 | `postman` | enabled OAuth | Restore URL and re-auth with `codex mcp login postman` if needed. |
+
+## Additional Local CLI Tools
+
+| Tool | Version in source machine | Restore method |
+| --- | --- | --- |
+| `firecrawl` | `1.19.24` | `npm install -g firecrawl-cli`, then authenticate with `firecrawl login --api-key "$FIRECRAWL_API_KEY"`. |
 
 ## Plugins
 

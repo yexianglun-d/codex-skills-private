@@ -25,15 +25,16 @@ Do not commit:
 - bearer tokens
 - `.env` files
 
-`CONTEXT7_API_KEY` is intentionally stored as `<SET_IN_LOCAL_CODEX_CONFIG>`.
+`CONTEXT7_API_KEY` and `FIRECRAWL_API_KEY` are intentionally stored as `<SET_IN_LOCAL_CODEX_CONFIG>`.
 
 ## Current Snapshot
 
-Snapshot date: 2026-07-01
+Snapshot date: 2026-07-06
 
 - Non-system local skills: 32
 - System skills noted but not vendored: 5
-- MCP servers: 7
+- MCP servers: 8
+- Additional local CLI tools tracked: 1
 - Unique plugin entries: 18
 - Plugin-provided skill files observed in cache: 87
 

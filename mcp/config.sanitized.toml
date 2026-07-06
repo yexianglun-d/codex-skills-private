@@ -38,6 +38,13 @@ startup_timeout_sec = 20
 [mcp_servers.context7.env]
 CONTEXT7_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
 
+[mcp_servers.firecrawl]
+command = "npx"
+args = ["-y", "firecrawl-mcp"]
+
+[mcp_servers.firecrawl.env]
+FIRECRAWL_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
+
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"
