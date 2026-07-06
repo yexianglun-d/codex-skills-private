@@ -1,5 +1,7 @@
 # Capability Map
 
+Language: English | [中文](CAPABILITY_MAP.zh-CN.md)
+
 Snapshot date: 2026-07-06
 
 This file explains what each local skill and MCP is for. Use it before installing more overlapping tools.

@@ -1,5 +1,7 @@
 # Codex Skills Private
 
+Language: English | [中文](README.zh-CN.md)
+
 Private backup and transfer kit for Deng's local Codex setup.
 
 This repository is meant to be handed to another Codex instance or another AI agent so it can understand what is installed locally and restore the useful parts without guessing.
@@ -13,6 +15,8 @@ This repository is meant to be handed to another Codex instance or another AI ag
 5. `skills/` - vendored non-system local skills.
 6. `mcp/config.sanitized.toml` - sanitized MCP config blocks.
 7. `global/AGENTS.md` - global Codex collaboration rules snapshot.
+
+Chinese versions are available as `*.zh-CN.md` for the main documents.
 
 ## Safety Rules
 

@@ -1,5 +1,7 @@
 # Restore Guide
 
+Language: English | [中文](RESTORE.zh-CN.md)
+
 This guide is for a new Codex machine or another AI agent receiving this repository.
 
 ## What This Repo Can Restore Directly

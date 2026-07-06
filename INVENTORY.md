@@ -1,5 +1,7 @@
 # Inventory
 
+Language: English | [中文](INVENTORY.zh-CN.md)
+
 Snapshot date: 2026-07-06
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.

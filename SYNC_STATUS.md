@@ -1,5 +1,7 @@
 # Sync Status
 
+Language: English | [中文](SYNC_STATUS.zh-CN.md)
+
 Snapshot date: 2026-07-06
 
 This file records the latest manual audit between the source machine and this restore repository.
