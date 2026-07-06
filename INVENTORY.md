@@ -76,28 +76,32 @@ These are expected to come from Codex/system installation.
 
 ## Plugins
 
-Unique plugin entries observed on the source machine:
+Plugin entries observed on the source machine. This table intentionally lists source/version entries; the same plugin name can appear in both curated and curated-remote cache locations.
 
 | Plugin | Version / Build | Source type |
 | --- | --- | --- |
-| `browser` | `26.623.42026` | openai-bundled |
-| `chrome` | `26.623.42026` | openai-bundled |
+| `browser` | `26.623.101652` | openai-bundled |
+| `chrome` | `26.623.101652` | openai-bundled |
 | `computer-use` | `1.0.857` | openai-bundled |
 | `build-ios-apps` | `0.1.2` | openai-curated-remote |
-| `build-web-apps` | `0.1.2` | openai-curated |
-| `figma` | `2.0.12` | openai-curated / remote cache |
-| `game-studio` | `0.1.2` | openai-curated |
-| `github` | `0.1.6` | openai-curated |
+| `build-macos-apps` | `0.1.4` | openai-curated-remote |
+| `figma` | `2.0.12` | openai-curated-remote |
 | `google-drive` | `0.1.7` | openai-curated-remote |
-| `heygen` | `2.2.4` | openai-curated |
-| `hyperframes` | `0.1.2` | openai-curated |
-| `remotion` | `1.0.3` | openai-curated |
+| `hyperframes` | `0.1.2` | openai-curated-remote |
 | `product-design` | `0.1.47` | openai-curated-remote |
-| `documents` | `26.623.12021` | openai-primary-runtime |
-| `pdf` | `26.623.12021` | openai-primary-runtime |
-| `presentations` | `26.623.12021` | openai-primary-runtime |
-| `spreadsheets` | `26.623.12021` | openai-primary-runtime |
-| `template-creator` | `26.623.12021` | openai-primary-runtime |
+| `superpowers` | `5.1.4` | openai-curated-remote |
+| `build-web-apps` | `d6169bef` | openai-curated |
+| `figma` | `d6169bef` | openai-curated |
+| `game-studio` | `d6169bef` | openai-curated |
+| `github` | `d6169bef` | openai-curated |
+| `heygen` | `d6169bef` | openai-curated |
+| `hyperframes` | `d6169bef` | openai-curated |
+| `remotion` | `d6169bef` | openai-curated |
+| `documents` | `26.630.12135` | openai-primary-runtime |
+| `pdf` | `26.630.12135` | openai-primary-runtime |
+| `presentations` | `26.630.12135` | openai-primary-runtime |
+| `spreadsheets` | `26.630.12135` | openai-primary-runtime |
+| `template-creator` | `26.630.12135` | openai-primary-runtime |
 
 ## Plugin-Provided Skill Groups
 
@@ -109,6 +113,7 @@ These are not vendored in `skills/`; restore them by installing/enabling the cor
 | `chrome` | `control-chrome` |
 | `computer-use` | `computer-use` |
 | `build-ios-apps` | `ios-app-intents`, `ios-debugger-agent`, `ios-ettrace-performance`, `ios-memgraph-leaks`, `ios-simulator-browser`, `swiftui-liquid-glass`, `swiftui-performance-audit`, `swiftui-ui-patterns`, `swiftui-view-refactor` |
+| `build-macos-apps` | `appkit-interop`, `build-run-debug`, `liquid-glass`, `packaging-notarization`, `signing-entitlements`, `swiftpm-macos`, `swiftui-patterns`, `telemetry`, `test-triage`, `view-refactor`, `window-management` |
 | `build-web-apps` | `frontend-app-builder`, `frontend-testing-debugging`, `react-best-practices`, `shadcn-best-practices`, `stripe-best-practices`, `supabase-best-practices` |
 | `figma` | `figma-code-connect`, `figma-create-new-file`, `figma-generate-design`, `figma-generate-diagram`, `figma-generate-library`, `figma-implement-motion`, `figma-swiftui`, `figma-use`, `figma-use-figjam`, `figma-use-motion`, `figma-use-slides` |
 | `game-studio` | `game-playtest`, `game-studio`, `game-ui-frontend`, `phaser-2d-game`, `react-three-fiber-game`, `sprite-pipeline`, `three-webgl-game`, `web-3d-asset-pipeline`, `web-game-foundations` |
@@ -118,6 +123,7 @@ These are not vendored in `skills/`; restore them by installing/enabling the cor
 | `hyperframes` | `gsap`, `hyperframes`, `hyperframes-cli`, `hyperframes-registry`, `website-to-hyperframes` |
 | `remotion` | `remotion` |
 | `product-design` | `audit`, `design-qa`, `get-context`, `ideate`, `image-to-code`, `index`, `prototype`, `research`, `share`, `url-to-code`, `user-context` |
+| `superpowers` | `brainstorming`, `dispatching-parallel-agents`, `executing-plans`, `finishing-a-development-branch`, `receiving-code-review`, `requesting-code-review`, `subagent-driven-development`, `systematic-debugging`, `test-driven-development`, `using-git-worktrees`, `using-superpowers`, `verification-before-completion`, `writing-plans`, `writing-skills` |
 | `documents` | `documents` |
 | `pdf` | `pdf` |
 | `presentations` | `presentations` |

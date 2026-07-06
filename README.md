@@ -6,11 +6,13 @@ This repository is meant to be handed to another Codex instance or another AI ag
 
 ## Read Order
 
-1. `INVENTORY.md` - exact list of skills, MCP servers, and plugins.
-2. `RESTORE.md` - restore procedure for a new machine.
-3. `skills/` - vendored non-system local skills.
-4. `mcp/config.sanitized.toml` - sanitized MCP config blocks.
-5. `global/AGENTS.md` - global Codex collaboration rules snapshot.
+1. `CAPABILITY_MAP.md` - what each skill, MCP, CLI, and plugin group is for.
+2. `SYNC_STATUS.md` - latest source-machine vs repository audit.
+3. `INVENTORY.md` - exact list of skills, MCP servers, plugins, and tracked CLI tools.
+4. `RESTORE.md` - restore procedure for a new machine.
+5. `skills/` - vendored non-system local skills.
+6. `mcp/config.sanitized.toml` - sanitized MCP config blocks.
+7. `global/AGENTS.md` - global Codex collaboration rules snapshot.
 
 ## Safety Rules
 
@@ -35,8 +37,9 @@ Snapshot date: 2026-07-06
 - System skills noted but not vendored: 5
 - MCP servers: 8
 - Additional local CLI tools tracked: 1
-- Unique plugin entries: 18
-- Plugin-provided skill files observed in cache: 87
+- Unique plugin names observed in cache: 20
+- Plugin cache entries by source/version: 22
+- Plugin-provided skill files observed in cache: 112
 
 ## Quick Restore
 

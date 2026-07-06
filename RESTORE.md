@@ -7,6 +7,7 @@ This guide is for a new Codex machine or another AI agent receiving this reposit
 - Non-system skills under `skills/`
 - Global instruction snapshot from `global/AGENTS.md`
 - Sanitized MCP config blocks from `mcp/config.sanitized.toml`
+- Capability and sync documentation: `CAPABILITY_MAP.md`, `SYNC_STATUS.md`, `INVENTORY.md`
 
 ## What Must Be Reconfigured Locally
 
