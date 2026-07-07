@@ -21,6 +21,8 @@ Do not begin code edits while the problem statement is still vague.
 
 If reproduction is impossible, switch into evidence collection mode instead of guessing.
 
+Evidence collection mode still needs concrete artifacts: logs, payloads, traces, screenshots, state snapshots, recent diffs, or environment facts. Record what is still unknown.
+
 ## 3. Find the first point of divergence
 
 Inspect the flow in this order until the first wrong fact appears:
@@ -35,6 +37,8 @@ Inspect the flow in this order until the first wrong fact appears:
 8. External dependency or environment
 
 The bug usually becomes tractable when the first wrong value, wrong state, or wrong ordering is identified.
+
+Stop at the earliest divergence that explains the symptom. Do not keep tracing only to find more downstream symptoms.
 
 ## 4. Build a falsifiable root-cause statement
 
@@ -71,6 +75,8 @@ Use the classification to choose where to look first:
 - Wrong timing: inspect async sequencing, races, cancellation, retries, and stale closures.
 - Wrong boundary: inspect validation placement, API contracts, serialization, and adapter layers.
 - Wrong environment: inspect permissions, config, OS differences, paths, and feature flags.
+- Wrong contract: inspect request/response shape, schema, enum values, serialization, auth scope, and adapter assumptions.
+- Wrong tooling: inspect package versions, lockfiles, generated files, build cache, CLI flags, and CI/local differences.
 
 ## 7. Design the fix at the real boundary
 
@@ -94,3 +100,5 @@ Avoid adding more conditionals if the state model itself is broken.
 - Verify that removed assumptions are actually gone
 
 Do not stop after "the obvious screen works now."
+
+For non-trivial bugs, use `validation-gates.md` before claiming completion.

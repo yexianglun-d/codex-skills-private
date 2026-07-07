@@ -39,7 +39,7 @@ These are vendored under `skills/` and can be restored directly.
 | `playwright-interactive` | default | Persistent browser/Electron interaction. |
 | `product-co-creator` | default | Product idea to MVP, flows, requirements, roadmap. |
 | `project-memory-manager` | explicit only | Lightweight repository-local project journal under `docs/project-memory`: current status, activity log, decisions, and next handoff. |
-| `root-cause-fixer` | default | Reproduce, diagnose, fix, and validate bugs. |
+| `root-cause-fixer` | default | Evidence-gated bug diagnosis and complete fixes with diagnostic playbooks, root-cause proof, and validation gates. |
 | `taste-skill` | explicit only | Anti-template frontend visual direction; main skill name is `design-taste-frontend`. |
 | `technical-solution-designer` | default | PRD/product plan to technical architecture and APIs. |
 | `ui-ux-pro-max` | explicit only | Private UI/UX intelligence and design system skill. |

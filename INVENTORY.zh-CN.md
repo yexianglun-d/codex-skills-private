@@ -39,7 +39,7 @@
 | `playwright-interactive` | 默认 | 持久化浏览器/Electron 交互。 |
 | `product-co-creator` | 默认 | 产品想法到 MVP、流程、需求、路线图。 |
 | `project-memory-manager` | 主动调用 | 仓库本地轻量项目日志：当前状态、活动日志、决策、下次交接。 |
-| `root-cause-fixer` | 默认 | 复现、诊断、修复并验证 Bug。 |
+| `root-cause-fixer` | 默认 | 带证据闸门的 Bug 诊断和完整修复：诊断 playbook、根因证明、验证闸门。 |
 | `taste-skill` | 主动调用 | 去模板感前端视觉方向；主 skill 名是 `design-taste-frontend`。 |
 | `technical-solution-designer` | 默认 | PRD/产品方案到技术架构和 API。 |
 | `ui-ux-pro-max` | 主动调用 | 私有 UI/UX intelligence 和设计系统 skill。 |

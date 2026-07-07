@@ -1,4 +1,4 @@
 interface:
   display_name: "Root Cause Fixer"
-  short_description: "Diagnose root causes and ship complete fixes"
-  default_prompt: "Use $root-cause-fixer to diagnose this bug from first principles, identify the true root cause, and implement a complete fix without patch-style workarounds."
+  short_description: "Diagnose bugs with evidence, root-cause proof, and validation gates"
+  default_prompt: "Use $root-cause-fixer to reproduce or collect evidence for this bug, prove the true root cause, fix the real boundary, and validate the original failure path without patch-style workarounds."

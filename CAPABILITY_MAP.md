@@ -37,7 +37,7 @@ Do not treat every installed capability as always-on. The default rule is smalle
 
 | Capability | Trigger | Use for |
 | --- | --- | --- |
-| `root-cause-fixer` | default | Reproduce, diagnose, fix, and validate real bugs without patch-style workarounds. |
+| `root-cause-fixer` | default | Bug-fix protocol with evidence gates, diagnostic playbooks, root-cause proof, boundary-correct fixes, and validation gates. |
 | `java-code-discipline` | auto | Java/Spring/MyBatis/Maven/Gradle code with compact Alibaba Java manual discipline and project-style reuse. |
 | `vue-code-discipline` | auto | Vue/Nuxt/Vite/uni-app code discipline, component/data-flow rules, enterprise directory structure, and validation. |
 | `playwright` | default | Terminal browser automation, form filling, snapshots, screenshots, and UI/data extraction. |

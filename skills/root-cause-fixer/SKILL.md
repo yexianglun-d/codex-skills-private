@@ -1,93 +1,110 @@
 ---
 name: root-cause-fixer
-description: Diagnose bugs by reproducing them, gathering evidence, isolating the true root cause, and implementing a complete fix with validation. Use when Codex is asked to investigate crashes, failing tests, regressions, incorrect UI or data behavior, race conditions, state inconsistencies, or persistent "why did this happen" issues, especially when the user explicitly wants root-cause analysis and rejects patch-style workarounds.
+description: Diagnose bugs through reproducible evidence, root-cause proof, boundary-correct fixes, and validation gates. Use when Codex is asked to investigate crashes, failing tests, regressions, incorrect UI or data behavior, race conditions, state inconsistencies, build/integration failures, or persistent "why did this happen" issues, especially when patch-style workarounds are rejected.
 ---
 
 # Root Cause Fixer
 
-## Overview
+## Role
 
-Treat every bug as a causality problem. Reproduce the failure, narrow the blast radius, identify the broken assumption or invariant, then fix that cause and validate the surrounding behavior.
+Treat every bug as a causality problem. Establish the failure, collect evidence, find the first wrong value/state/boundary, prove the root cause, fix the real boundary, and validate the original repro plus nearby regression paths.
 
-Reject patch-style workarounds by default. Do not stop at symptom suppression, defensive masking, or surface-only fixes unless the user explicitly asks for temporary mitigation.
+This skill is intentionally stricter than normal implementation work. It rejects symptom suppression by default.
 
-## Trigger Phrases
+## Use When
 
-Use this skill when the request sounds like:
+Use this skill when the task sounds like:
 
-- "Do not patch it. Find the real reason and fix it."
-- "Why is this bug happening?"
-- "Trace the root cause of this crash/regression."
-- "Give me a complete fix, not a workaround."
-- "This only hides the issue. Solve it properly."
+- "Find the real reason."
+- "Do not patch it."
+- "Why did this happen?"
+- "Fix the failing test/build/regression."
+- "This UI/data/state is wrong."
+- "Trace the crash, race, stale state, or integration failure."
 
-## Working Rules
+For Java bugs, also use `java-code-discipline`. For Vue bugs, also use `vue-code-discipline`. For complex or repeated failures, `superpowers:systematic-debugging` may be added after this route is selected.
 
-- Reproduce the failure before editing code when feasible.
-- Gather evidence before declaring a cause.
-- Fix the earliest broken assumption, boundary, or invariant that explains the symptom.
-- Prefer removing impossible states over adding more guards around them.
-- Preserve the existing architecture when it is sound; change the architecture directly when it is the root problem.
-- State uncertainty explicitly when the root cause is not yet proven.
-- Ask before applying temporary mitigation that intentionally leaves the root problem in place.
+## Hard Gates
+
+Do not edit code until at least one is true:
+
+- The failure is reproduced.
+- A failing test, stack trace, bad payload, log excerpt, screenshot, or state snapshot proves the failure.
+- Reproduction is not feasible and evidence-collection mode has been explicitly stated.
+
+Do not claim the fix is complete until all are true:
+
+- The root cause statement explains the symptom, trigger conditions, and why nearby paths behave differently.
+- The fix changes the cause, not only the visible symptom.
+- The original repro or closest available evidence path has been re-checked.
+- Matching tests, build, lint, browser check, API check, or manual validation has run, or skipped checks are explained.
 
 ## Workflow
 
-1. Establish the failure.
-   Capture the exact symptom, expected behavior, trigger, affected surface, and first known occurrence.
-2. Reproduce the issue.
-   Freeze a minimal repro path. Distinguish deterministic, intermittent, environment-specific, and data-specific failures.
-3. Bound the problem.
-   Find the first layer where values, state, ownership, timing, or configuration diverge from expectation.
-4. Prove the root cause.
-   Form a falsifiable statement in the form "X causes Y because Z" and test it against the evidence.
-5. Design the complete fix.
-   Change the source of truth, ownership boundary, state model, parsing rule, synchronization rule, or validation point that actually created the bad outcome.
-6. Validate adjacent behavior.
-   Re-run the repro, run nearby checks, and inspect the most likely regression paths.
-7. Explain the result.
-   State the root cause, the actual fix, why patch-style alternatives were rejected, and any remaining risk.
+1. Define the failure.
+   Capture symptom, expected behavior, trigger, affected surface, environment, timing, and whether it is new/intermittent/long-standing.
+2. Reproduce or collect evidence.
+   Prefer a minimal repro. If impossible, gather targeted logs, payloads, stack traces, screenshots, DB/state snapshots, or history around the suspected boundary.
+3. Find the first divergence.
+   Trace from symptom backward until the first wrong value, wrong state, wrong ordering, wrong config, or wrong ownership boundary appears.
+4. Classify the bug.
+   Use the failure type to decide where to inspect first: data, UI state, API/service, persistence/cache, async/concurrency, environment/config, build/tooling, or integration.
+5. Prove a falsifiable root cause.
+   Use: `The bug happens because <cause> leads to <broken behavior> under <conditions>.`
+6. Fix the real boundary.
+   Change the source of truth, validation boundary, state model, lifecycle, parsing rule, transaction, cache invalidation, or integration contract that created the failure.
+7. Validate with gates.
+   Re-run the original repro, exercise adjacent paths, run scoped automated checks, and document skipped checks.
+8. Report concisely.
+   State what changed, why this is the root fix, how it was validated, and remaining risk.
 
-## Investigation Heuristics
+## Evidence Standard
 
-- Trace data backward from the symptom to the first wrong value.
-- Trace state transitions until the first impossible state appears.
-- Compare working and failing paths to isolate the divergence point.
-- Check ownership and lifecycle boundaries before adding null guards.
-- Check concurrency, caching, and stale state before adding retries or delays.
-- Check parsing and normalization before special-casing one bad input.
-- Check configuration, environment, and build differences before rewriting logic.
+Before changing code, keep enough notes to answer:
+
+- What proves the bug exists?
+- What is the smallest known trigger?
+- Where is the first wrong fact?
+- What hypothesis explains it?
+- What would disprove the hypothesis?
+
+Use `references/evidence-template.md` when the bug is non-trivial, cross-layer, intermittent, or likely to be disputed.
 
 ## Reject These Fix Patterns
 
-- Adding retries, sleeps, debounces, or reordered awaits to hide a race you have not explained.
-- Adding UI-level fallback text to mask corrupted upstream data.
-- Adding null/default guards around state that should never be invalid.
-- Swallowing exceptions or broadening catch blocks without changing the failing condition.
-- Duplicating validation across layers when the real boundary is misplaced.
-- Fixing a single symptom path while the same broken assumption remains elsewhere.
+- Hardcoding one known bad input while the parser or invariant remains wrong.
+- Adding null/default guards without explaining why invalid state existed.
+- Swallowing exceptions, broadening catch blocks, or hiding error messages.
+- Adding retry, sleep, debounce, forced refresh, or reordered await without proving a timing cause.
+- Fixing only UI display while corrupted data/source state remains.
+- Bypassing validation, auth, permissions, transactions, or type checks.
+- Making tests green by weakening assertions or replacing the real path with mocks.
+- Treating a single successful mock/2xx/static screenshot as proof of real behavior.
 
-## Use The References
+## References
 
-- Read [references/bug-workflow.md](references/bug-workflow.md) for the detailed investigation checklist.
-- Read [references/fix-standard.md](references/fix-standard.md) to judge whether a proposed fix is complete enough.
+Read only what applies:
+
+- `references/bug-workflow.md` - general investigation checklist.
+- `references/evidence-template.md` - evidence notes and final report template.
+- `references/diagnostic-playbooks.md` - targeted playbooks by bug type.
+- `references/validation-gates.md` - completion gates and validation choices.
+- `references/fix-standard.md` - judge whether a fix is complete or cosmetic.
 
 ## Output Shape
 
-When reporting back, structure the answer around:
+For simple bugs, answer in this order:
 
-1. Symptom and repro
-2. Proven root cause
-3. Complete fix
-4. Validation performed
-5. Residual risk, if any
+1. Symptom and evidence
+2. Root cause
+3. Fix
+4. Validation
+5. Residual risk
+
+For complex bugs, use the template from `references/evidence-template.md`.
 
 ## Scope Limits
 
-Do not use this skill for:
+Do not use this skill for pure feature work, cosmetic refactors, or temporary mitigations the user explicitly requested.
 
-- Pure feature development with no bug involved
-- Cosmetic-only refactors
-- Temporary workarounds the user explicitly prefers for schedule reasons
-
-If the request starts as a bug but the real answer is architectural change, continue and make that architectural change explicitly.
+Temporary mitigation is allowed only when the user asks for containment or production risk demands it. Label it as temporary, state the unresolved root problem, and list the permanent follow-up.

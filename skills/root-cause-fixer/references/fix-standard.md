@@ -9,6 +9,8 @@ Use this file to judge whether a proposed fix is complete or merely cosmetic.
 - It prevents the same failure mode across equivalent paths.
 - It leaves the code easier to reason about than before, or at least not harder.
 - It includes validation that matches the original failure mode.
+- It does not weaken tests, validation, auth, permissions, transactions, or type safety to make the symptom disappear.
+- It is scoped to the affected boundary and does not format, rewrite, or migrate unrelated code.
 
 ## A fix is probably incomplete when
 
@@ -18,6 +20,8 @@ Use this file to judge whether a proposed fix is complete or merely cosmetic.
 - It special-cases one input while the parser or invariant remains broken.
 - It fixes only the UI while the data or domain layer still misbehaves.
 - It relies on "should be fine now" without a repro or check.
+- It changes the test to match broken behavior.
+- It adds a mock or static fixture that bypasses the real failing path.
 
 ## Preferred fix patterns
 
@@ -27,6 +31,7 @@ Use this file to judge whether a proposed fix is complete or merely cosmetic.
 - Simplify branching so the broken path cannot drift from the correct path.
 - Make async sequencing explicit with clear ownership and lifecycle.
 - Correct caching invalidation or remove stale cache dependence.
+- Preserve project conventions for errors, responses, logging, transactions, and UI state.
 
 ## When temporary mitigation is acceptable
 

@@ -37,7 +37,7 @@
 
 | 能力 | 触发策略 | 用途 |
 | --- | --- | --- |
-| `root-cause-fixer` | 默认 | 复现、诊断、修复并验证真实 Bug，避免表面补丁。 |
+| `root-cause-fixer` | 默认 | Bug 修复协议：证据闸门、诊断 playbook、根因证明、边界修复、验证闸门。 |
 | `java-code-discipline` | 自动 | Java/Spring/MyBatis/Maven/Gradle 代码，压缩版阿里巴巴 Java 规范和项目风格复用。 |
 | `vue-code-discipline` | 自动 | Vue/Nuxt/Vite/uni-app 代码规范、组件/数据流、企业级目录结构和验证。 |
 | `playwright` | 默认 | 终端浏览器自动化、表单、截图、页面数据提取。 |
