@@ -21,6 +21,16 @@ Do not stack planning, debugging, language discipline, and verification skills b
 
 ## Read First
 
+Path rule: resolve every relative path in this skill from the directory that contains this `SKILL.md`.
+
+For example, `Engineering-Router/00-router/routing-matrix.md` means:
+
+```text
+<coding-router skill directory>/Engineering-Router/00-router/routing-matrix.md
+```
+
+Do not resolve these references from `$CODEX_HOME/skills`, the current project root, or any global shared directory. If a referenced file is missing, list files under the `coding-router` skill directory and correct the local path before continuing.
+
 Before routing, read:
 
 1. `Engineering-Router/00-router/when-to-use-what.md`

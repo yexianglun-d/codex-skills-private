@@ -2,6 +2,8 @@
 
 This folder contains lightweight routing guidance for `coding-router`.
 
+Path rule: this folder is inside the `coding-router` skill directory. All paths in `coding-router/SKILL.md` that start with `Engineering-Router/` are relative to the `coding-router` skill directory, not to `$CODEX_HOME/skills` or the current project root.
+
 Read only:
 
 1. `00-router/when-to-use-what.md`

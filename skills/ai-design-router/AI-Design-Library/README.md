@@ -2,6 +2,8 @@
 
 This library organizes local design-related Codex skills by responsibility.
 
+Path rule: this folder is inside the `ai-design-router` skill directory. All paths in `ai-design-router/SKILL.md` that start with `AI-Design-Library/` are relative to the `ai-design-router` skill directory, not to `$CODEX_HOME/skills` or the current project root.
+
 It is not a new design system and does not replace project conventions. Use it to route tasks cleanly and avoid stacking overlapping skills.
 
 ```text

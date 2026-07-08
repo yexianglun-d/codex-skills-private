@@ -21,6 +21,16 @@ Use more only when the user explicitly asks for a full design-to-code workflow, 
 
 ## Read First
 
+Path rule: resolve every relative path in this skill from the directory that contains this `SKILL.md`.
+
+For example, `AI-Design-Library/00-router/routing-matrix.md` means:
+
+```text
+<ai-design-router skill directory>/AI-Design-Library/00-router/routing-matrix.md
+```
+
+Do not resolve these references from `$CODEX_HOME/skills`, the current project root, or any global shared directory. If a referenced file is missing, list files under the `ai-design-router` skill directory and correct the local path before continuing.
+
 Before routing, read:
 
 1. `AI-Design-Library/00-router/when-to-use-what.md`
