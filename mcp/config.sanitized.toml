@@ -45,6 +45,13 @@ args = ["-y", "firecrawl-mcp"]
 [mcp_servers.firecrawl.env]
 FIRECRAWL_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
 
+[mcp_servers.wecom-bot]
+command = "uvx"
+args = ["wecom-bot-mcp-server"]
+
+[mcp_servers.wecom-bot.env]
+WECOM_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=<SET_IN_LOCAL_CODEX_CONFIG>"
+
 [mcp_servers.node_repl]
 args = []
 command = "/Applications/Codex.app/Contents/Resources/cua_node/bin/node_repl"

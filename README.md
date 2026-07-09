@@ -31,15 +31,15 @@ Do not commit:
 - bearer tokens
 - `.env` files
 
-`CONTEXT7_API_KEY` and `FIRECRAWL_API_KEY` are intentionally stored as `<SET_IN_LOCAL_CODEX_CONFIG>`.
+`CONTEXT7_API_KEY`, `FIRECRAWL_API_KEY`, and the Enterprise WeChat webhook key are intentionally stored as `<SET_IN_LOCAL_CODEX_CONFIG>`.
 
 ## Current Snapshot
 
-Snapshot date: 2026-07-06
+Snapshot date: 2026-07-09
 
 - Non-system local skills: 32
 - System skills noted but not vendored: 5
-- MCP servers: 8
+- MCP servers: 9
 - Additional local CLI tools tracked: 1
 - Unique plugin names observed in cache: 20
 - Plugin cache entries by source/version: 22

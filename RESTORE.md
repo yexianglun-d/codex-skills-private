@@ -90,6 +90,7 @@ Recommended commands:
 codex mcp add sequential-thinking --env DISABLE_THOUGHT_LOGGING=true -- npx -y @modelcontextprotocol/server-sequential-thinking
 codex mcp add context7 -- npx -y @upstash/context7-mcp
 codex mcp add firecrawl --env FIRECRAWL_API_KEY=<SET_IN_LOCAL_CODEX_CONFIG> -- npx -y firecrawl-mcp
+codex mcp add wecom-bot --env 'WECOM_WEBHOOK_URL=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=<SET_IN_LOCAL_CODEX_CONFIG>' -- uvx wecom-bot-mcp-server
 codex mcp add postman --url https://mcp.postman.com/mcp
 codex mcp add figma --url https://mcp.figma.com/mcp
 codex mcp add github --url https://api.githubcopilot.com/mcp/ --bearer-token-env-var GITHUB_PAT_TOKEN
@@ -106,6 +107,9 @@ CONTEXT7_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
 
 [mcp_servers.firecrawl.env]
 FIRECRAWL_API_KEY = "<SET_IN_LOCAL_CODEX_CONFIG>"
+
+[mcp_servers.wecom-bot.env]
+WECOM_WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=<SET_IN_LOCAL_CODEX_CONFIG>"
 ```
 
 For Firecrawl CLI:
@@ -126,6 +130,8 @@ For GitHub MCP, set `GITHUB_PAT_TOKEN` locally before use. Do not commit the tok
 
 For Figma MCP, authenticate from the target Codex/Figma environment if the server reports `Not logged in`.
 
+For Enterprise WeChat, create a group bot in the target WeCom group and replace the placeholder key in `WECOM_WEBHOOK_URL`. Treat the webhook URL as a secret.
+
 `node_repl` and `computer-use` are normally installed or managed by the Codex app and bundled plugins. Do not blindly copy old absolute runtime paths if the Codex app version differs.
 
 ## Step 4: Restore Plugins
@@ -142,6 +148,7 @@ Check MCP:
 codex mcp list
 codex mcp get context7
 codex mcp get sequential-thinking
+codex mcp get wecom-bot
 ```
 
 Check skills:

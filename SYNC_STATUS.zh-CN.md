@@ -2,7 +2,7 @@
 
 语言：[English](SYNC_STATUS.md) | 中文
 
-快照日期：2026-07-06
+快照日期：2026-07-09
 
 本文件记录源机器和本恢复仓库之间的最近一次人工对账结果。
 
@@ -11,7 +11,7 @@
 | 区域 | 源机器 | 仓库 | 状态 |
 | --- | ---: | ---: | --- |
 | 带 `SKILL.md` 的非系统本地 skills | 32 | 32 | 已同步 |
-| MCP servers | 8 | 8 | 已同步 |
+| MCP servers | 9 | 9 | 已同步 |
 | 额外记录的 CLI 工具 | 1 | 1 | 已同步 |
 | 插件缓存里的唯一插件名 | 20 | 20 | 已更新 |
 | 插件缓存 source/version 条目 | 22 | 22 | 已更新 |
@@ -43,6 +43,7 @@ find ./skills -mindepth 2 -maxdepth 2 -name SKILL.md
 | `computer-use` | 已启用，插件管理 |
 | `context7` | 已启用 |
 | `firecrawl` | 已启用 |
+| `wecom-bot` | 已启用，Webhook 为占位值 |
 | `figma` | 已启用，未登录 |
 | `github` | 已启用，使用 bearer token env |
 | `node_repl` | 已启用，Codex App 运行时管理 |
@@ -59,6 +60,7 @@ find ./skills -mindepth 2 -maxdepth 2 -name SKILL.md
 
 - `CONTEXT7_API_KEY`
 - `FIRECRAWL_API_KEY`
+- `WECOM_WEBHOOK_URL`
 - `GITHUB_PAT_TOKEN`
 
 ## 插件缓存对比

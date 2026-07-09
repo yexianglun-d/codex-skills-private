@@ -2,7 +2,7 @@
 
 Language: English | [中文](SYNC_STATUS.zh-CN.md)
 
-Snapshot date: 2026-07-06
+Snapshot date: 2026-07-09
 
 This file records the latest manual audit between the source machine and this restore repository.
 
@@ -11,7 +11,7 @@ This file records the latest manual audit between the source machine and this re
 | Area | Source machine | Repository | Status |
 | --- | ---: | ---: | --- |
 | Non-system local skills with `SKILL.md` | 32 | 32 | synced |
-| MCP servers | 8 | 8 | synced |
+| MCP servers | 9 | 9 | synced |
 | Additional tracked CLI tools | 1 | 1 | synced |
 | Unique plugin names in cache | 20 | 20 | updated |
 | Plugin cache entries by source/version | 22 | 22 | updated |
@@ -43,6 +43,7 @@ Current source machine MCPs:
 | `computer-use` | enabled, plugin-managed |
 | `context7` | enabled |
 | `firecrawl` | enabled |
+| `wecom-bot` | enabled with placeholder webhook |
 | `figma` | enabled, not logged in |
 | `github` | enabled with bearer token env |
 | `node_repl` | enabled, Codex app runtime managed |
@@ -59,6 +60,7 @@ Secrets remain placeholders only:
 
 - `CONTEXT7_API_KEY`
 - `FIRECRAWL_API_KEY`
+- `WECOM_WEBHOOK_URL`
 - `GITHUB_PAT_TOKEN`
 
 ## Plugin Cache Comparison

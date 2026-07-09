@@ -2,7 +2,7 @@
 
 Language: English | [中文](CAPABILITY_MAP.zh-CN.md)
 
-Snapshot date: 2026-07-06
+Snapshot date: 2026-07-09
 
 This file explains what each local skill and MCP is for. Use it before installing more overlapping tools.
 
@@ -73,6 +73,7 @@ Do not treat every installed capability as always-on. The default rule is smalle
 | `context7` | Current documentation for libraries, frameworks, SDKs, APIs, CLIs, and cloud services. | Prefer over memory for version-specific technical usage. |
 | `sequential-thinking` | Structured reasoning for complex bugs, architecture, migrations, multi-module refactors, and high-risk decisions. | Do not use for small local edits. |
 | `firecrawl` | Public web data collection: websites, docs not covered by Context7, help centers, blogs, changelogs, competitor pages, web-to-Markdown/JSON. | Do not use for logged-in private pages, sensitive data, or visual/browser-state verification. |
+| `wecom-bot` | Enterprise WeChat group bot notifications: completion notices, failure alerts, daily/weekly summaries, and project handoff messages. | Send-only notification outlet; do not use for reading private chat data or broad Enterprise WeChat API automation. |
 | `figma` | Figma MCP operations. | Login may be required; current source snapshot showed Figma not logged in. |
 | `github` | GitHub repository/PR/issue work through MCP. | Requires local `GITHUB_PAT_TOKEN` if needed. |
 | `postman` | Postman collections/environments and API workflow. | Requires OAuth login on target machine. |

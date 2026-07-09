@@ -2,7 +2,7 @@
 
 语言：[English](INVENTORY.md) | 中文
 
-快照日期：2026-07-06
+快照日期：2026-07-09
 
 本清单会尽量去重记录。本地 skills 按目录列出；插件缓存则按 source/version 条目列出，因为同一个插件名可能同时出现在 curated 和 curated-remote 缓存中。
 
@@ -64,6 +64,7 @@
 | `computer-use` | 已启用 | Codex bundled Computer Use 插件管理。 |
 | `context7` | 已启用 | 恢复配置后，本地设置 `CONTEXT7_API_KEY`。 |
 | `firecrawl` | 已启用 | 使用 `npx -y firecrawl-mcp` 恢复，然后本地设置 `FIRECRAWL_API_KEY`。 |
+| `wecom-bot` | 已启用，Webhook 为占位值 | 使用 `uvx wecom-bot-mcp-server` 恢复，然后本地设置真实 `WECOM_WEBHOOK_URL`。 |
 | `figma` | 已启用，未登录 | 恢复 URL；需要设计操作时在 Figma/Codex 中认证。 |
 | `github` | 已启用，使用 bearer token env | 恢复 URL，如需使用则本地设置 `GITHUB_PAT_TOKEN`。 |
 | `node_repl` | 已启用 | Codex App runtime 管理；目标机器需检查路径。 |

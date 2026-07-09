@@ -2,7 +2,7 @@
 
 语言：[English](CAPABILITY_MAP.md) | 中文
 
-快照日期：2026-07-06
+快照日期：2026-07-09
 
 本文件说明每个本地 skill、MCP、CLI 和插件组分别用于什么场景。安装更多同类工具前，先看这里，避免重复和混乱。
 
@@ -73,6 +73,7 @@
 | `context7` | 查询库、框架、SDK、API、CLI、云服务的当前文档。 | 版本相关技术用法优先使用它。 |
 | `sequential-thinking` | 复杂 Bug、架构、迁移、多模块重构、高风险决策的结构化分析。 | 小改动不要默认使用。 |
 | `firecrawl` | 公开网页资料采集：官网、Context7 未覆盖文档、帮助中心、博客、更新日志、竞品页面、网页转 Markdown/JSON。 | 不用于登录后私密页面、敏感数据、视觉/浏览器状态验证。 |
+| `wecom-bot` | 企业微信群机器人通知：任务完成、失败告警、日报/周报、项目交接消息。 | 只作为发送通知出口；不要用于读取私密聊天或泛化企业微信 API 自动化。 |
 | `figma` | Figma MCP 操作。 | 可能需要登录；当前源机器快照显示 Figma 未登录。 |
 | `github` | GitHub 仓库、PR、issue 工作。 | 如需使用，需要本地 `GITHUB_PAT_TOKEN`。 |
 | `postman` | Postman collection、environment 和 API 工作流。 | 目标机器需要 OAuth 登录。 |

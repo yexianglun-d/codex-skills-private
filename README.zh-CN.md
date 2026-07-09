@@ -31,15 +31,15 @@ Deng 本机 Codex 环境的私有备份与迁移包。
 - bearer token
 - `.env` 文件
 
-`CONTEXT7_API_KEY` 和 `FIRECRAWL_API_KEY` 只允许以 `<SET_IN_LOCAL_CODEX_CONFIG>` 占位形式出现。
+`CONTEXT7_API_KEY`、`FIRECRAWL_API_KEY` 和企业微信 Webhook key 只允许以 `<SET_IN_LOCAL_CODEX_CONFIG>` 占位形式出现。
 
 ## 当前快照
 
-快照日期：2026-07-06
+快照日期：2026-07-09
 
 - 非系统本地 skills：32
 - 仅记录、不备份的系统 skills：5
-- MCP servers：8
+- MCP servers：9
 - 额外记录的本地 CLI 工具：1
 - 插件缓存里的唯一插件名：20
 - 插件缓存 source/version 条目：22
