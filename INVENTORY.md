@@ -2,7 +2,7 @@
 
 Language: English | [中文](INVENTORY.zh-CN.md)
 
-Snapshot date: 2026-07-09
+Snapshot date: 2026-07-13
 
 This inventory intentionally lists entries once. Some plugins may exist in multiple cache locations; the table below deduplicates them by plugin name.
 
@@ -56,6 +56,15 @@ These are expected to come from Codex/system installation.
 | `plugin-creator` |
 | `skill-creator` |
 | `skill-installer` |
+
+## External Design Candidates (Catalog Only)
+
+These are recorded for future review. They are not installed locally, vendored under `skills/`, or included in the default router.
+
+| Candidate | Source | Intended use |
+| --- | --- | --- |
+| `editorial-illustrations` | `Ali-Aria/aria-visual-skills/plugins/aria-visual-skills/skills/editorial-illustrations` | Article/editorial illustrations and personal-IP visuals. |
+| `xhs-visual-cards` | `Ali-Aria/aria-visual-skills/plugins/aria-visual-skills/skills/xhs-visual-cards` | Xiaohongshu/social-content visual cards. |
 
 ## MCP Servers
 

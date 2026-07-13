@@ -35,12 +35,13 @@ Do not commit:
 
 ## Current Snapshot
 
-Snapshot date: 2026-07-09
+Snapshot date: 2026-07-13
 
 - Non-system local skills: 32
 - System skills noted but not vendored: 5
 - MCP servers: 9
 - Additional local CLI tools tracked: 1
+- External design candidates recorded only: 2
 - Unique plugin names observed in cache: 20
 - Plugin cache entries by source/version: 22
 - Plugin-provided skill files observed in cache: 112

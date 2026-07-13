@@ -2,7 +2,7 @@
 
 语言：[English](INVENTORY.md) | 中文
 
-快照日期：2026-07-09
+快照日期：2026-07-13
 
 本清单会尽量去重记录。本地 skills 按目录列出；插件缓存则按 source/version 条目列出，因为同一个插件名可能同时出现在 curated 和 curated-remote 缓存中。
 
@@ -56,6 +56,15 @@
 | `plugin-creator` |
 | `skill-creator` |
 | `skill-installer` |
+
+## 外部设计候选资源（仅记录）
+
+以下资源只登记供后续评估，不安装到本机，不 vendored 到 `skills/`，也不加入默认路由。
+
+| 候选资源 | 来源 | 适用场景 |
+| --- | --- | --- |
+| `editorial-illustrations` | `Ali-Aria/aria-visual-skills/plugins/aria-visual-skills/skills/editorial-illustrations` | 文章/编辑型插画和个人 IP 配图。 |
+| `xhs-visual-cards` | `Ali-Aria/aria-visual-skills/plugins/aria-visual-skills/skills/xhs-visual-cards` | 小红书/社交内容视觉卡片。 |
 
 ## MCP Servers
 

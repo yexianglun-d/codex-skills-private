@@ -2,7 +2,7 @@
 
 语言：[English](CAPABILITY_MAP.md) | 中文
 
-快照日期：2026-07-09
+快照日期：2026-07-13
 
 本文件说明每个本地 skill、MCP、CLI 和插件组分别用于什么场景。安装更多同类工具前，先看这里，避免重复和混乱。
 
@@ -56,6 +56,13 @@
 | `figma-code-connect-components` | 默认 | 建立 Figma 组件和代码组件映射。 |
 | `gsap-*` | 默认 | GSAP 动效：核心 API、timeline、ScrollTrigger、插件、React、非 React 框架、工具和性能。 |
 | `hatch-pet` | 默认 | 创建、修复、验证、视觉 QA 和打包 Codex 动态宠物/精灵图。 |
+
+仅记录的视觉内容候选资源：
+
+| 候选资源 | 触发策略 | 用途 |
+| --- | --- | --- |
+| `editorial-illustrations` | 仅主动评估 | 文章/编辑型插画和个人 IP 配图；未安装，不参与默认路由。 |
+| `xhs-visual-cards` | 仅主动评估 | 小红书/社交内容视觉卡片；未安装，不参与默认路由。 |
 
 ## 文档、写作、上下文
 

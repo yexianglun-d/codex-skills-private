@@ -49,6 +49,7 @@ bash scripts/restore-skills.sh
 - 它选择最小必要设计 skill 组合，避免默认叠加多个重叠设计 skill。
 - 它把 `VoltAgent/awesome-design-md` vendored 到 `skills/ai-design-router/AI-Design-Library/08-design-references/`。
 - `typeui` 只作为候选记录，不是已安装 MCP、CLI、插件或默认 skill。
+- `skills/ai-design-router/AI-Design-Library/99-candidates/` 只保存外部设计候选资源目录。`editorial-illustrations` 和 `xhs-visual-cards` 不会作为本地 skill 安装或恢复。
 
 恢复后的代码工程工作流：
 

@@ -2,9 +2,14 @@
 
 Language: English | [中文](SYNC_STATUS.zh-CN.md)
 
-Snapshot date: 2026-07-09
+Snapshot date: 2026-07-13
 
 This file records the latest manual audit between the source machine and this restore repository.
+
+## Catalog-Only External Resources
+
+- Added `editorial-illustrations` and `xhs-visual-cards` from `Ali-Aria/aria-visual-skills`.
+- These are catalog entries only. No local skill was installed or changed on the source machine.
 
 ## Summary
 

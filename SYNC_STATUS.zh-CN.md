@@ -2,9 +2,14 @@
 
 语言：[English](SYNC_STATUS.md) | 中文
 
-快照日期：2026-07-09
+快照日期：2026-07-13
 
 本文件记录源机器和本恢复仓库之间的最近一次人工对账结果。
+
+## 仅记录的外部资源
+
+- 已从 `Ali-Aria/aria-visual-skills` 登记 `editorial-illustrations` 和 `xhs-visual-cards`。
+- 这两个条目仅作为候选资源记录；源机器没有安装或修改对应本地 skill。
 
 ## 摘要
 

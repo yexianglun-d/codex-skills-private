@@ -49,6 +49,7 @@ The restored design workflow uses:
 - It selects the smallest useful specialist skill set and prevents default stacking of overlapping design skills.
 - It vendors `VoltAgent/awesome-design-md` under `skills/ai-design-router/AI-Design-Library/08-design-references/` as a local `DESIGN.md` reference library.
 - `typeui` is documented as a candidate only; it is not installed as an MCP, CLI, plugin, or default skill.
+- `skills/ai-design-router/AI-Design-Library/99-candidates/` contains catalog-only external design candidates. `editorial-illustrations` and `xhs-visual-cards` are not installed or restored as local skills.
 
 The restored coding workflow uses:
 

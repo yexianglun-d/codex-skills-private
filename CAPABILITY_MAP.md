@@ -2,7 +2,7 @@
 
 Language: English | [中文](CAPABILITY_MAP.zh-CN.md)
 
-Snapshot date: 2026-07-09
+Snapshot date: 2026-07-13
 
 This file explains what each local skill and MCP is for. Use it before installing more overlapping tools.
 
@@ -56,6 +56,13 @@ Do not treat every installed capability as always-on. The default rule is smalle
 | `figma-code-connect-components` | default | Map Figma components to code components. |
 | `gsap-*` | default | GSAP animation: core API, timelines, ScrollTrigger, plugins, React, non-React frameworks, utilities, and performance. |
 | `hatch-pet` | default | Create, repair, validate, visually QA, and package Codex animated pets and spritesheets. |
+
+Catalog-only visual content candidates:
+
+| Candidate | Trigger policy | Use |
+| --- | --- | --- |
+| `editorial-illustrations` | explicit review only | Article/editorial illustrations and personal-IP visuals. Not installed or part of the default route. |
+| `xhs-visual-cards` | explicit review only | Xiaohongshu/social-content visual cards. Not installed or part of the default route. |
 
 ## Documents, Writing, Context
 
